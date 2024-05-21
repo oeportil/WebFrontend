@@ -12,3 +12,6 @@
 .bg-azulOscuro{
     background-color: var(--azulOscuro);
 }
+.navbar a{
+    color: white !important;
+}
