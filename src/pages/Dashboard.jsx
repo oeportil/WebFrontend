@@ -1,5 +1,6 @@
 import { Col, Container, Row, Table } from "react-bootstrap";
 import imgDashborad from "../images/imgdashboard.png";
+
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
@@ -20,18 +21,19 @@ const Dashboard = () => {
               tecnología. Nuestro equipo de expertos está aquí para resolver tus
               desafíos informáticos con soluciones rápidas y efectivas.
             </p>
-            <div>
-              <Link
-                to={"/"}
-                style={{
-                  textDecoration: "none",
-                  color: "#656C95",
-                  fontSize: "1.3rem",
-                }}
-              >
-                Crear nuevo ticket{" "}
-              </Link>
-            </div>
+            <Link
+              to={"/"}
+              style={{
+                textDecoration: "none",
+                color: "#656C95",
+                fontSize: "1.3rem",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              Crear nuevo ticket
+              <i className="bi bi-arrow-right fs-1 mx-2"></i>{" "}
+            </Link>
           </Col>
         </Row>
         <Row>

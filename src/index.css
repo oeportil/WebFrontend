@@ -1,20 +1,21 @@
-:root{
-    --negro: #1E1F26;
-    --azulOscuro: #283655;
-    --azul: #4D648D;
-    --celeste: #D0E1F9;
-    --azulMedio: #656C95;
-    --verde: #7ED957;
-    --rojo: #FF3131;
-    --cafe: #AB7D41;
+:root {
+  --negro: #1e1f26;
+  --azulOscuro: #283655;
+  --azul: #4d648d;
+  --celeste: #d0e1f9;
+  --azulMedio: #656c95;
+  --verde: #7ed957;
+  --rojo: #ff3131;
+  --cafe: #ab7d41;
 }
 
-.bg-azulOscuro{
-    background-color: var(--azulOscuro);
+.bg-azulOscuro {
+  background-color: var(--azulOscuro);
 }
-.bg-celeste{
-    background-color: var(--celeste) !important;
+.navbar a {
+  color: white !important;
 }
-.navbar a{
-    color: white !important;
+* {
+  box-sizing: border-box;
+  margin: 0;
 }
