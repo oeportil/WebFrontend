@@ -3,6 +3,10 @@ import Login from "./pages/Login";
 import { createBrowserRouter } from "react-router-dom";
 
 import Not_Found from "./pages/Not_Found";
+import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -14,9 +18,13 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "other",
-        element: <div>Hello</div>,
+        path: "user",
+        element: <Dashboard/>,
       },
+      {
+        path: "admin",
+        element: <AdminDashboard/>
+      }
     ],
   },
 ]);
