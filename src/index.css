@@ -1,0 +1,14 @@
+:root{
+    --negro: #1E1F26;
+    --azulOscuro: #283655;
+    --azul: #4D648D;
+    --celeste: #D0E1F9;
+    --azulMedio: #656C95;
+    --verde: #7ED957;
+    --rojo: #FF3131;
+    --cafe: #AB7D41;
+}
+
+.bg-azulOscuro{
+    background-color: var(--azulOscuro);
+}
