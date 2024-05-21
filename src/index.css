@@ -19,3 +19,6 @@
   box-sizing: border-box;
   margin: 0;
 }
+.bg-celeste{
+    background-color: var(--celeste) !important;
+}
