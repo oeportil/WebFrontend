@@ -12,6 +12,9 @@
 .bg-azulOscuro{
     background-color: var(--azulOscuro);
 }
+.bg-celeste{
+    background-color: var(--celeste) !important;
+}
 .navbar a{
     color: white !important;
 }
