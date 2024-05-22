@@ -1,0 +1,41 @@
+.select{
+    width: 100% !important;
+}
+@media (min-width: 768px) {
+    .select{
+        width: 25% !important;
+    }
+}
+.buscar{
+    width: 100% !important;
+}
+@media (min-width: 768px) {
+    .buscar{
+        width: 50% !important;
+    }
+}
+
+
+.Au__boton{
+    background-color: var(--azul) !important;
+    border: none !important;
+}
+.Au__boton:hover{
+    background-color: var(--azulOscuro) !important;
+    border: none !important;
+}
+@media (max-width: 768px) {
+    .Au__boton{
+        width: 100%;
+    }
+}
+.nada{
+    border: none;
+    background: none;
+    margin: 0.2rem;
+    font-size: 1.5rem;
+    color: var(--azulOscuro)
+}
+.nada:last-of-type{
+    color: var(--rojo);
+}

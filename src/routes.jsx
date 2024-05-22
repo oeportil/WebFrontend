@@ -5,6 +5,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Not_Found from "./pages/Not_Found";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminUsuarios from "./pages/admin/AdminUsuarios";
+import Seguimiento from "./pages/admin/Seguimiento";
 
 
 export const router = createBrowserRouter([
@@ -24,6 +26,14 @@ export const router = createBrowserRouter([
       {
         path: "admin",
         element: <AdminDashboard/>
+      },
+      {
+        path: "admin/usuarios",
+        element: <AdminUsuarios/>
+      },
+      {
+        path: "admin/seguimiento",
+        element: <Seguimiento/>
       }
     ],
   },

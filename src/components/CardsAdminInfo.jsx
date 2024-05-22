@@ -10,6 +10,8 @@ const CardsAdminInfo = ({clase, num, tipo}) => {
             <div className='d-flex flex-column align-items-center'>
                 <h4>{num}</h4>
                 <h5>Tickets {tipo}</h5>
+                //Aqui agregas el boton del modal
+                
             </div>
         </Card.Body>
     </Card>
