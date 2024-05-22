@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import Seguimiento from "./pages/admin/Seguimiento";
+import AsignacionTickets from "./pages/admin/AsignacionTickets";
+import AdminTickets from "./pages/admin/AdminTickets";
 
 
 export const router = createBrowserRouter([
@@ -34,6 +36,14 @@ export const router = createBrowserRouter([
       {
         path: "admin/seguimiento",
         element: <Seguimiento/>
+      },
+      {
+        path: "admin/asignacion",
+        element: <AsignacionTickets/>
+      },
+      {
+        path: "admin/tickets",
+        element: <AdminTickets/>
       }
     ],
   },

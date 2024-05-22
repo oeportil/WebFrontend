@@ -8,9 +8,14 @@
   --rojo: #ff3131;
   --cafe: #ab7d41;
 }
-
+.txt_azul{
+  color: var(--azul) !important;
+}
 .bg-azulOscuro {
   background-color: var(--azulOscuro);
+}
+.bg-azulMedio{
+  background-color: var(--azulMedio) !important;
 }
 .navbar a {
   color: white !important;
@@ -21,4 +26,15 @@
 }
 .bg-celeste{
     background-color: var(--celeste) !important;
+}
+.bg-none{
+  background: none;
+}
+.buscar{
+  width: 100% !important;
+}
+@media (min-width: 768px) {
+  .buscar{
+      width: 50% !important;
+  }
 }

@@ -58,7 +58,7 @@ const Usuarios = () => {
                     <td>4856982</td>
                     <td>correo@correo.com</td>
                     <td>
-                      <button className='nada'>
+                      <button onClick={() => setModalShow(true)} className='nada'>
                         <i class="bi bi-pencil-square"></i>
                       </button>
                       <button className='nada'>

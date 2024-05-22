@@ -6,15 +6,6 @@
         width: 25% !important;
     }
 }
-.buscar{
-    width: 100% !important;
-}
-@media (min-width: 768px) {
-    .buscar{
-        width: 50% !important;
-    }
-}
-
 
 .Au__boton{
     background-color: var(--azul) !important;
@@ -38,4 +29,18 @@
 }
 .nada:last-of-type{
     color: var(--rojo);
+}
+.grid_modal_3,
+.grid_modal_2{
+    display: grid;
+}
+@media (min-width:768px) {
+    .grid_modal_3{
+        gap: 1rem;
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .grid_modal_2{
+        gap: 1rem;
+        grid-template-columns: repeat(2, 1fr);
+    }
 }

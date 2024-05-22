@@ -27,6 +27,16 @@ const Header = () => {
               </Link>
             </Nav.Link>
             <Nav.Link className="text-white"> 
+              <Link to={"/dashboard/admin/tickets"} className="text-decoration-none">
+                Tickets
+              </Link>
+            </Nav.Link>
+            <Nav.Link className="text-white"> 
+              <Link to={"/dashboard/admin/asignacion"} className="text-decoration-none">
+                Asignacion de Tickets
+              </Link>
+            </Nav.Link>
+            <Nav.Link className="text-white"> 
               <Link to={"/dashboard/admin/seguimiento"} className="text-decoration-none">
                 Seguimiento
               </Link>
