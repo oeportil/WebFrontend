@@ -1,7 +1,7 @@
 import { useState } from "react";
 import  Form  from "react-bootstrap/Form"
 import Table from "react-bootstrap/Table"
-import ModalAsignarTicket from "../../components/ModalAsignarTicket";
+import ModalAsignarTicket from "../../components/modales/ModalAsignarTicket";
 
 const AsignacionTickets = () => {
     const [modalShow, setModalShow] = useState(false);

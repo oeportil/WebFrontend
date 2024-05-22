@@ -2,7 +2,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useState } from 'react';
-import ModalCrearUsuario from '../../components/ModalCrearUsuario';
+import ModalCrearUsuario from '../../components/modales/ModalCrearUsuario';
 import '../../styles/userAdmin.css';
 import  Table  from 'react-bootstrap/Table'
 

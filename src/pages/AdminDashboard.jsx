@@ -1,7 +1,7 @@
 import React from 'react'
-import CardsAdminInfo from '../components/CardsAdminInfo'
-import EmpleadosTablaAdmin from '../components/EmpleadosTablaAdmin'
-import HistorialTablaAdmin from '../components/HistorialTablaAdmin'
+import CardsAdminInfo from '../components/cards/CardsAdminInfo'
+import EmpleadosTablaAdmin from '../components/tables/EmpleadosTablaAdmin'
+import HistorialTablaAdmin from '../components/tables/HistorialTablaAdmin'
 
 const AdminDashboard = () => {
   return (
@@ -10,7 +10,7 @@ const AdminDashboard = () => {
             <CardsAdminInfo 
             clase={"bi bi-check-circle"} 
             num={23} 
-            tipo={"Resuelto"} />
+            tipo={"Resueltos"} />
             <CardsAdminInfo 
             clase={"bi bi-clock-history"} 
             num={50} 
@@ -18,7 +18,7 @@ const AdminDashboard = () => {
             <CardsAdminInfo 
             clase={"bi bi-chat-right-text"} 
             num={23} 
-            tipo={"Resuelto"} />
+            tipo={"Abiertos"}/>
         </div>
         <div className='d-lg-flex gap-3 mt-5'>
             <EmpleadosTablaAdmin/>

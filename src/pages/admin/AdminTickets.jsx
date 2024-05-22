@@ -104,6 +104,9 @@ const AdminTickets = () => {
                     <td>Pedro</td>
                     <td>correo@correo.com</td>
                     <button className="border-0 bg-none txt_azul">
+                            Ver Ticket
+                    </button>
+                    <button className="border-0 bg-none txt_azul">
                             Editar Tarea
                     </button>
                 </tr>
