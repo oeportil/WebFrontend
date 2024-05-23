@@ -1,0 +1,48 @@
+ainer {
+    max-height: 900vh;
+}
+
+.filters-container {
+    background-color: #d3dbe2;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    min-height: 150px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .filters-header {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .filters-subheader {
+    text-align: left;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  .filters-options {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .filters-options .form-check {
+    display: flex;
+    align-items: center;
+  }
+  
+  .filters-options .form-check label {
+    margin-left: 5px;
+    font-size: 1rem;
+  }
+  
+  .table-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
