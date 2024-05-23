@@ -12,7 +12,7 @@
   color: var(--azul) !important;
 }
 .bg-azulOscuro {
-  background-color: var(--azulOscuro);
+  background-color: var(--azulOscuro) !important;
 }
 .bg-azulMedio{
   background-color: var(--azulMedio) !important;

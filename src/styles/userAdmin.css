@@ -31,7 +31,8 @@
     color: var(--rojo);
 }
 .grid_modal_3,
-.grid_modal_2{
+.grid_modal_2,
+.grid_modal_4{
     display: grid;
 }
 @media (min-width:768px) {
@@ -42,5 +43,9 @@
     .grid_modal_2{
         gap: 1rem;
         grid-template-columns: repeat(2, 1fr);
+    }
+    .grid_modal_4{
+        gap: 1rem;
+        grid-template-columns: repeat(4, 1fr);
     }
 }

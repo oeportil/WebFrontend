@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import Table from 'react-bootstrap/Table';
+import ModalDetalleTicket from '../modales/ModalDetalleTicket';
 
 const TablaInfoTickets = () => {
+    const [modalShow, setModalShow] = useState(false);
   return (
     <Table responsive="lg" className="my-3 mx-2">
             <thead>
@@ -32,9 +35,14 @@ const TablaInfoTickets = () => {
                     <td>pedro@correo.com</td>
                     <td>dd/mm/yyyy</td>
                     <td>
-                        <button className="border-0 bg-none txt_azul">
+                        <button className="border-0 bg-none txt_azul" onClick={() => setModalShow(true)}>
                             Ver detalle
                         </button>
+                        <ModalDetalleTicket
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                        num={12}                       
+                        />
                     </td>                    
                 </tr>
             </tbody>
