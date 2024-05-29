@@ -9,6 +9,7 @@ import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import Seguimiento from "./pages/admin/Seguimiento";
 import AsignacionTickets from "./pages/admin/AsignacionTickets";
 import AdminTickets from "./pages/admin/AdminTickets";
+import AdminDetalleTicket from "./pages/admin/AdminDetalleTicket";
 
 
 export const router = createBrowserRouter([
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
       {
         path: "admin/tickets",
         element: <AdminTickets/>
+      },
+      {
+        path:"admin/tickets/:id",
+        element: <AdminDetalleTicket/>
       }
     ],
   },

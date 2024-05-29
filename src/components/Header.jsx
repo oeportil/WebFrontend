@@ -15,32 +15,32 @@ const Header = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          <Nav >
-            <Nav.Link  className="text-white">
+          <Nav className="navbar__flex">
+            <Nav.Item  className="text-white">
               <Link className="text-decoration-none">
                 Home
               </Link>
-            </Nav.Link>
-            <Nav.Link className="text-white"> 
+            </Nav.Item>
+            <Nav.Item className="text-white"> 
               <Link className="text-decoration-none">
                 Link
               </Link>
-            </Nav.Link>
-            <Nav.Link className="text-white"> 
+            </Nav.Item>
+            <Nav.Item className="text-white"> 
               <Link to={"/dashboard/admin/tickets"} className="text-decoration-none">
                 Tickets
               </Link>
-            </Nav.Link>
-            <Nav.Link className="text-white"> 
+            </Nav.Item>
+            <Nav.Item className="text-white"> 
               <Link to={"/dashboard/admin/asignacion"} className="text-decoration-none">
                 Asignacion de Tickets
               </Link>
-            </Nav.Link>
-            <Nav.Link className="text-white"> 
+            </Nav.Item>
+            <Nav.Item className="text-white"> 
               <Link to={"/dashboard/admin/seguimiento"} className="text-decoration-none">
                 Seguimiento
               </Link>
-            </Nav.Link>
+            </Nav.Item>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown" menuVariant="dark">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">

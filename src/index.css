@@ -17,6 +17,14 @@
 .bg-azulMedio{
   background-color: var(--azulMedio) !important;
 }
+.bg-cafe{
+  background-color: var(--cafe) !important;
+}
+.bg-verde{
+  background-color: var(--verde) !important;
+}
+
+
 .navbar a {
   color: white !important;
 }
@@ -36,5 +44,23 @@
 @media (min-width: 768px) {
   .buscar{
       width: 50% !important;
+  }
+}
+.boton-25{
+  width: 100% !important;
+}
+@media (min-width:768px) {
+  .boton-25{
+    width: 25% !important;
+  }
+}
+.navbar__flex{
+  display: flex ;
+  gap: 1rem;
+  align-items: start;
+}
+@media (min-width: 992px) {
+  .navbar__flex{
+    align-items: center;
   }
 }

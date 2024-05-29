@@ -26,7 +26,7 @@ const Usuarios = () => {
                   aria-describedby="basic-addon2"
                 />
                 <Button variant="outline-secondary" id="button-addon2">
-                  Filtrar <i class="bi bi-arrow-right"></i>
+                  Filtrar <i className="bi bi-arrow-right"></i>
                 </Button>
               </InputGroup>
 
@@ -59,11 +59,12 @@ const Usuarios = () => {
                     <td>correo@correo.com</td>
                     <td>
                       <button onClick={() => setModalShow(true)} className='nada'>
-                        <i class="bi bi-pencil-square"></i>
+                        <i className="bi bi-pencil-square"></i>
                       </button>
                       <button className='nada'>
-                        <i class="bi bi-trash3"></i>
+                        <i className="bi bi-trash3"></i>
                       </button>
+
                     </td>
                 </tr>
             </tbody>

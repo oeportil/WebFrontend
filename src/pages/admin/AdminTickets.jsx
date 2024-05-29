@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import Form from 'react-bootstrap/Form'
 import Table from "react-bootstrap/Table"
+import { Link } from 'react-router-dom'
+import ModalEditarTarea from '../../components/modales/ModalEditarTarea';
 
 const AdminTickets = () => {
+    const [modalShow, setModalShow] = useState(false);
   return (
     <main className='container my-3'>
         <h4 className='text-center text-uppercase txt_azul fw-normal'>Tickets Asignados</h4>
@@ -47,9 +51,11 @@ const AdminTickets = () => {
                     <td>Service</td>
                     <td>Pedro</td>
                     <td>correo@correo.com</td>
-                    <button className="border-0 bg-none txt_azul">
-                            Editar Ticket
-                    </button>
+                    <td>
+                        <Link className="txt_azul" to={`/dashboard/admin/tickets/${12}`}>
+                                Editar Ticket
+                        </Link>    
+                    </td>
                 </tr>
             </tbody>
         </Table>
@@ -89,7 +95,7 @@ const AdminTickets = () => {
                         Cliente
                     </th >
                     <th  className='bg-azulMedio text-white'>
-                        Maquetado
+                        Nombre Tarea
                     </th>
                     <th className='bg-azulMedio'>
 
@@ -102,13 +108,19 @@ const AdminTickets = () => {
                     <td>12</td>
                     <td>Service</td>
                     <td>Pedro</td>
-                    <td>correo@correo.com</td>
-                    <button className="border-0 bg-none txt_azul">
-                            Ver Ticket
-                    </button>
-                    <button className="border-0 bg-none txt_azul">
-                            Editar Tarea
-                    </button>
+                    <td>Maquetado</td>
+                    <td>
+                        <button className="border-0 bg-none txt_azul">
+                                Ver Ticket
+                        </button>
+                        <button className="border-0 bg-none txt_azul" onClick={() => setModalShow(true)}>
+                                Editar Tarea
+                        </button>
+                        <ModalEditarTarea
+                         show={modalShow}
+                         onHide={() => setModalShow(false)}
+                         />
+                    </td>
                 </tr>
             </tbody>
         </Table>
