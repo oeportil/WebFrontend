@@ -10,7 +10,7 @@ import Seguimiento from "./pages/admin/Seguimiento";
 import AsignacionTickets from "./pages/admin/AsignacionTickets";
 import AdminTickets from "./pages/admin/AdminTickets";
 import AdminDetalleTicket from "./pages/admin/AdminDetalleTicket";
-
+import RequireAdmin from "./helpers/RequireAdmin";
 
 export const router = createBrowserRouter([
   {
@@ -24,32 +24,56 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "user",
-        element: <Dashboard/>,
+        element: <Dashboard />,
       },
       {
         path: "admin",
-        element: <AdminDashboard/>
+        element: (
+          <RequireAdmin>
+            <AdminDashboard />
+          </RequireAdmin>
+        ),
       },
       {
         path: "admin/usuarios",
-        element: <AdminUsuarios/>
+        element: (
+          <RequireAdmin>
+            <AdminUsuarios />
+          </RequireAdmin>
+        ),
       },
       {
         path: "admin/seguimiento",
-        element: <Seguimiento/>
+        element: (
+          <RequireAdmin>
+            <Seguimiento />
+          </RequireAdmin>
+        ),
       },
       {
         path: "admin/asignacion",
-        element: <AsignacionTickets/>
+        element: (
+          <RequireAdmin>
+            <AsignacionTickets />
+          </RequireAdmin>
+        ),
       },
       {
         path: "admin/tickets",
-        element: <AdminTickets/>
+        element: (
+          <RequireAdmin>
+            <AdminTickets />
+          </RequireAdmin>
+        ),
       },
       {
-        path:"admin/tickets/:id",
-        element: <AdminDetalleTicket/>
-      }
+        path: "admin/tickets/:id",
+        element: (
+          <RequireAdmin>
+            <AdminDetalleTicket />
+          </RequireAdmin>
+        ),
+      },
     ],
   },
 ]);
