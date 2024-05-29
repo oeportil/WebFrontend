@@ -2,8 +2,11 @@ import { Col, Container, Row, Table } from "react-bootstrap";
 import imgDashborad from "../images/imgdashboard.png";
 
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import ModalCrearTicket from "../components/modales/ModalCrearTicket";
 
 const Dashboard = () => {
+  const [modalShow, setModalShow] = useState(false);
   const theadContent = ["ID", "Servicio", "Fecha", "Estado"];
   return (
     <>
@@ -21,19 +24,25 @@ const Dashboard = () => {
               tecnología. Nuestro equipo de expertos está aquí para resolver tus
               desafíos informáticos con soluciones rápidas y efectivas.
             </p>
-            <Link
-              to={"/"}
+            <button
+              onClick={() => setModalShow(true)}
               style={{
                 textDecoration: "none",
                 color: "#656C95",
                 fontSize: "1.3rem",
                 display: "flex",
                 alignItems: "center",
+                background: "none",
+                border: "none",
               }}
             >
               Crear nuevo ticket
               <i className="bi bi-arrow-right fs-1 mx-2"></i>{" "}
-            </Link>
+            </button>
+            <ModalCrearTicket
+              show={modalShow}
+              onHide={() => setModalShow(false)}
+            />
           </Col>
         </Row>
         <Row>
