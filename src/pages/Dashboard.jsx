@@ -1,11 +1,23 @@
 import { Col, Container, Row, Table } from "react-bootstrap";
 import imgDashborad from "../images/imgdashboard.png";
 
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalCrearTicket from "../components/modales/ModalCrearTicket";
 
 const Dashboard = () => {
+  const [tickets, setTickets] = useState([]);
+  //aca se llama a la API
+  useEffect(() => {
+    const APIRequest = async () => {
+      //ahorita es estatico para probar
+      const url = `${import.meta.env.VITE_API_URL}/Ticket/ObtenerPorCliente/1`;
+      const APIAnswer = await fetch(url);
+      const data = await APIAnswer.json();
+      setTickets(data);
+    };
+    //llamando la función
+    APIRequest();
+  }, []);
   const [modalShow, setModalShow] = useState(false);
   const theadContent = ["ID", "Servicio", "Fecha", "Estado"];
   return (
@@ -59,7 +71,16 @@ const Dashboard = () => {
                   ))}
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+                {tickets.map((ticket) => (
+                  <tr key={ticket.id}>
+                    <td>{ticket.id}</td>
+                    <td>{ticket.servicio}</td>
+                    <td>{ticket.fecha}</td>
+                    <td>{ticket.estado}</td>
+                  </tr>
+                ))}
+              </tbody>
             </Table>
           </Col>
         </Row>
