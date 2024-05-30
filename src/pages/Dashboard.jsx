@@ -7,13 +7,18 @@ import ModalCrearTicket from "../components/modales/ModalCrearTicket";
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   //aca se llama a la API
+  const {id_usuario} = JSON.parse(localStorage.getItem("userData"))
   useEffect(() => {
     const APIRequest = async () => {
       //ahorita es estatico para probar
-      const url = `${import.meta.env.VITE_API_URL}/Ticket/ObtenerPorCliente/1`;
+      const url = `${import.meta.env.VITE_API_URL}/Ticket/ObtenerPorCliente/${id_usuario}`;
       const APIAnswer = await fetch(url);
-      const data = await APIAnswer.json();
-      setTickets(data);
+      if(APIAnswer.status !== 404){
+        const data = await APIAnswer.json();
+        setTickets(data);
+      } else {
+        setTickets([])
+      }
     };
     //llamando la función
     APIRequest();
@@ -61,7 +66,7 @@ const Dashboard = () => {
           <Col>
             {" "}
             <h2 className="text-center mt-5 mb-4">Mis Tickets</h2>
-            <Table striped bordered hover className="text-center">
+            {tickets.length !== 0 ?  <Table striped bordered hover className="text-center">
               <thead>
                 <tr className="">
                   {theadContent.map((content) => (
@@ -81,7 +86,7 @@ const Dashboard = () => {
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </Table> : <div  className="text-center"> <h4 className="text-dark-emphasis">No hay Tickets que mostrar</h4></div>}
           </Col>
         </Row>
       </Container>

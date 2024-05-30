@@ -3,9 +3,24 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Logo from '../images/Potologo.png';
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+  let tipo = 0
+  let nombre = ""
+  if(localStorage.getItem("userData") != null)  
+    {
+      const usuario = JSON.parse(localStorage.getItem("userData"))
+      tipo = usuario.tipo
+      nombre = usuario.nombre
+    }
+   
+      const handleCloseSesion = () =>{
+        localStorage.removeItem("userData")
+        navigate("/")
+      }
+
   return (
   <>
     <Navbar expand="lg" className="bg-azulOscuro navbar">
@@ -17,35 +32,32 @@ const Header = () => {
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="navbar__flex">
             <Nav.Item  className="text-white">
-              <Link className="text-decoration-none">
+              <Link  to={"/dashboard/user"} className="text-decoration-none">
                 Home
               </Link>
             </Nav.Item>
-            <Nav.Item className="text-white"> 
-              <Link className="text-decoration-none">
-                Link
-              </Link>
-            </Nav.Item>
-            <Nav.Item className="text-white"> 
+            {tipo == 3 && <Nav.Item className="text-white"> 
               <Link to={"/dashboard/admin/tickets"} className="text-decoration-none">
                 Tickets
               </Link>
-            </Nav.Item>
-            <Nav.Item className="text-white"> 
+            </Nav.Item>}
+           {tipo == 3 &&  <Nav.Item className="text-white"> 
+              <Link to={"/dashboard/admin/usuarios"} className="text-decoration-none">
+                Usuarios
+              </Link>
+            </Nav.Item>}
+            {tipo === 3 && <Nav.Item className="text-white"> 
               <Link to={"/dashboard/admin/asignacion"} className="text-decoration-none">
                 Asignacion de Tickets
               </Link>
-            </Nav.Item>
-            <Nav.Item className="text-white"> 
+            </Nav.Item>}
+            {tipo === 3 && <Nav.Item className="text-white"> 
               <Link to={"/dashboard/admin/seguimiento"} className="text-decoration-none">
                 Seguimiento
               </Link>
-            </Nav.Item>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown" menuVariant="dark">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
+            </Nav.Item>}
+            <NavDropdown title={nombre} id="basic-nav-dropdown" menuVariant="dark">
+              <NavDropdown.Item onClick={handleCloseSesion}>Cerrar Sesión</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
