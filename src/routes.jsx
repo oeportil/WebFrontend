@@ -24,7 +24,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "user",
-        element: <Dashboard />,
+        element: (
+          <RequireAdmin>
+            <Dashboard />
+          </RequireAdmin>
+        ),
       },
       {
         path: "admin",

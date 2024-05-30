@@ -5,12 +5,16 @@ import { Image } from 'react-bootstrap';
 import Logo from '../images/Potologo.png';
 import Button from 'react-bootstrap/Button';
 import '../styles/login.css';
+import { getAdmin } from '../controllers/UsuariosControllers';
 
 const Login = () => {
   const handleSubmit = (e) =>{
     e.preventDefault();
     console.log("funciono")
   }
+
+  getAdmin()
+
   return (
     <div className='login_layout'>
       <Card className='login_card p-4'>
