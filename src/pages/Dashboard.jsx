@@ -3,27 +3,31 @@ import imgDashborad from "../images/imgdashboard.png";
 
 import { useEffect, useState } from "react";
 import ModalCrearTicket from "../components/modales/ModalCrearTicket";
+import ModalDetalleTicket from "../components/modales/ModalDetalleTicket";
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   //aca se llama a la API
-  const {id_usuario} = JSON.parse(localStorage.getItem("userData"))
+  const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
   useEffect(() => {
     const APIRequest = async () => {
       //ahorita es estatico para probar
-      const url = `${import.meta.env.VITE_API_URL}/Ticket/ObtenerPorCliente/${id_usuario}`;
+      const url = `${
+        import.meta.env.VITE_API_URL
+      }/Ticket/ObtenerPorCliente/${id_usuario}`;
       const APIAnswer = await fetch(url);
-      if(APIAnswer.status !== 404){
+      if (APIAnswer.status !== 404) {
         const data = await APIAnswer.json();
         setTickets(data);
       } else {
-        setTickets([])
+        setTickets([]);
       }
     };
     //llamando la función
     APIRequest();
   }, []);
   const [modalShow, setModalShow] = useState(false);
+  const [modalDetalle, setModalDetalle] = useState(false);
   const theadContent = ["ID", "Servicio", "Fecha", "Estado"];
   return (
     <>
@@ -66,27 +70,52 @@ const Dashboard = () => {
           <Col>
             {" "}
             <h2 className="text-center mt-5 mb-4">Mis Tickets</h2>
-            {tickets.length !== 0 ?  <Table striped bordered hover className="text-center">
-              <thead>
-                <tr className="">
-                  {theadContent.map((content) => (
-                    <th key={content} style={{ backgroundColor: "#99ACFF" }}>
-                      {content}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {tickets.map((ticket) => (
-                  <tr key={ticket.id}>
-                    <td>{ticket.id}</td>
-                    <td>{ticket.servicio}</td>
-                    <td>{ticket.fecha}</td>
-                    <td>{ticket.estado}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table> : <div  className="text-center"> <h4 className="text-dark-emphasis">No hay Tickets que mostrar</h4></div>}
+            {tickets.length !== 0 ? (
+              <div
+                style={{
+                  width: "100%",
+                  height: "35vh",
+                  overflowY: "auto",
+                  marginBottom: "1rem",
+                }}
+              >
+                <Table striped bordered hover className="text-center">
+                  <thead>
+                    <tr className="">
+                      {theadContent.map((content) => (
+                        <th
+                          key={content}
+                          style={{ backgroundColor: "#99ACFF" }}
+                        >
+                          {content}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tickets.map((ticket) => (
+                      <tr key={ticket.id} onClick={() => setModalDetalle(true)}>
+                        <td>{ticket.id}</td>
+                        <td>{ticket.servicio}</td>
+                        <td>{ticket.fecha}</td>
+                        <td>{ticket.estado}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                <ModalDetalleTicket
+                  show={modalDetalle}
+                  onHide={() => setModalDetalle(false)}
+                />
+              </div>
+            ) : (
+              <div className="text-center">
+                {" "}
+                <h4 className="text-dark-emphasis">
+                  No hay Tickets que mostrar
+                </h4>
+              </div>
+            )}
           </Col>
         </Row>
       </Container>
