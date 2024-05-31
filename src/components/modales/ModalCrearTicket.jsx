@@ -4,16 +4,59 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ModalCrearTicket = (props) => {
+  const stylesP = {
+    padding: "10px",
+    border: "solid rgb(222,226,230) 1px",
+    borderRadius: "12px",
+  };
+  //aca estoy extrayendo los datos del localeStorage
+  const userDataString = JSON.parse(localStorage.getItem("userData"));
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (true) {
-      toast.success("Ticket Creado Con exito");
-      setTimeout(() => {
-        props.onHide();
-      }, 1500);
-    } else {
-      toast.error("El Ticket No pudo Crearse");
+    //aca se crea el formData
+    const formData = new FormData();
+
+    // Agregando los campos del formulario al objeto FormData
+    formData.append("descripcion", e.target.elements.descripcion.value);
+    formData.append("servicio", e.target.elements.servicio.value);
+    formData.append("archivo", e.target.elements.archivo.files[0]);
+    formData.append("prioridad", e.target.elements.prioridad.value);
+    formData.append("id_cliente", userDataString.id_usuario);
+
+    const camposRequeridos = [
+      "descripcion",
+      "servicio",
+      "prioridad",
+      "id_cliente",
+    ];
+    const faltanCampos = [];
+    camposRequeridos.forEach((campo) => {
+      if (!formData.has(campo) || formData.get(campo) === "") {
+        faltanCampos.push(campo);
+      }
+    });
+    if (faltanCampos.length > 0) {
+      toast.error(`Faltan los siguientes campos: ${faltanCampos.join(", ")}`);
+
+      return;
     }
+
+    const url = `${import.meta.env.VITE_API_URL}/Ticket/CrearTicket`;
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then(() => {
+        toast.success("Ticket creado con éxito");
+        setTimeout(() => {
+          props.onHide();
+          window.location.reload();
+        }, 1500);
+      })
+      .catch(() => {
+        toast.error("El ticket no pudo crearse");
+      });
   };
   const optionsPrority = ["BAJA", "NORMAL", "IMPORTANTE", "CRÍTICA"];
 
@@ -30,25 +73,38 @@ const ModalCrearTicket = (props) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form className="row" onSubmit={handleSubmit}>
+        <Form
+          className="row"
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+        >
           <div className="col-lg">
             <h5 className="text-uppercase fw-semibold">
               Descripcion del Ticket
             </h5>
             <Form.Group className="mb-3" controlId="servicio">
               <Form.Label>Nombre de la Aplicacion o Servicio</Form.Label>
-              <Form.Control placeholder="..." />
+              <Form.Control placeholder="..." required />
             </Form.Group>
             <Form.Group className="mb-3" controlId="descripcion">
               <Form.Label>Descripcion del Problema</Form.Label>
-              <Form.Control as="textarea" height={50} placeholder="..." />
+              <Form.Control
+                as="textarea"
+                height={50}
+                placeholder="..."
+                required
+              />
             </Form.Group>
             <div>
               <Form.Group className="mb-3" controlId="archivo">
                 <Form.Control type="file" placeholder="..." />
               </Form.Group>
               <Form.Group className="mb-3" controlId="prioridad">
-                <Form.Select className="w-100" defaultValue="Choose...">
+                <Form.Select
+                  className="w-100"
+                  defaultValue="Choose..."
+                  required
+                >
                   {optionsPrority.map((option) => (
                     <option key={option} value={option}>
                       {option}
@@ -64,18 +120,12 @@ const ModalCrearTicket = (props) => {
           </div>
           <div className="col-lg">
             <h5 className="text-uppercase fw-semibold">Datos de Usuario</h5>
-            <Form.Group className="mb-3" controlId="nombre">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control placeholder="..." />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="correo">
-              <Form.Label>Correo</Form.Label>
-              <Form.Control placeholder="..." />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="telefono">
-              <Form.Label>Telefono</Form.Label>
-              <Form.Control placeholder="..." />
-            </Form.Group>
+            <p>Nombre:</p>
+            <p style={stylesP}>{userDataString.nombre}</p>
+            <p>Correo:</p>
+            <p style={stylesP}>{userDataString.correo}</p>
+            <p>Teléfono</p>
+            <p style={stylesP}>{userDataString.telefono}</p>
             <Form.Control
               type="submit"
               value={"Enviar Ticket"}
