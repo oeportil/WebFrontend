@@ -187,7 +187,6 @@ const ModalCrearUsuario = (props) => {
   }
 
   async function editarUsuario() {
-    console.log(usuario)
     if(usuario.telefono === usuario.contacto){
       toast.error("Los telefonos deben de ser distintos");
       return

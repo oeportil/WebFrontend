@@ -8,8 +8,8 @@ export async function getEmpleados(){
         return []
     }
 }  
-export async function getTecnicos(){
-    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerUsus/2`)
+export async function getTecnicos(tec){
+    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerUsus/${tec}`)
     if(tecnic.status !== 404){
         return tecnic.json()
     } else {
@@ -52,4 +52,14 @@ export async function getTecnicos(){
     } else {
         return usuario.status
     }
+   }
+
+   export async function getTecnicosByEmail(email){
+        const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerUsus/2?busqueda=${email}`)
+        if(tecnic.status != 404){
+            const resultado = await tecnic.json()
+            return resultado
+        } else {
+            return []
+        }  
    }

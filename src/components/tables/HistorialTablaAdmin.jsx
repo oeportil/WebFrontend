@@ -31,8 +31,8 @@ const HistorialTablaAdmin = () => {
                 </tr>
             </thead>
             <tbody>
-                {Tickets.map(ticket => (
-                    <tr>
+                {Tickets.map((ticket, i) => (
+                    <tr key={i}>
                         <td>{ticket.servicio}</td>
                         <td>{ticket.fecha}</td>
                         <td>{ticket.empleado}</td>
