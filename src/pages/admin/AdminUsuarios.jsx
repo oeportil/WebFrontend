@@ -78,10 +78,6 @@ const Usuarios = () => {
                       <button onClick={() => editarUsuario(tecnico)} className='nada'>
                         <i className="bi bi-pencil-square"></i>
                       </button>
-                      <button className='nada'>
-                        <i className="bi bi-trash3"></i>
-                      </button>
-
                     </td>
                 </tr>
                 

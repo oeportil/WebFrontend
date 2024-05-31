@@ -4,12 +4,19 @@ import Form from 'react-bootstrap/Form';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { createUsuario, getRoles, updateUsuario } from '../../controllers/UsuariosControllers';
 
 
 
 const ModalCrearUsuario = (props) => {
   const[usuario, setUsuario] = useState({})
+  const[rol, setRol] = useState([])
   useEffect(() => {
+    const data = async() => {
+      const rickrol = await getRoles()
+      setRol(rickrol)
+    }
+    data()
     if(Object.keys(props.usuario).length != 0){
       setUsuario(props.usuario)
     } else {
@@ -28,7 +35,6 @@ const ModalCrearUsuario = (props) => {
   const handleChange = e =>{
    setUsuario({...usuario, [e.target.name]: e.target.value})
   }
-
   return (
     <Modal
     {...props}
@@ -89,10 +95,10 @@ const ModalCrearUsuario = (props) => {
               <div className='mb-3'>
               <Form.Label htmlFor="Rol">Rol</Form.Label>
               <Form.Select className='rounded-5 border-dark' aria-label="Default select example" name="id_rol" onChange={handleChange}>
-                  <option disabled selected>-- Seleccione Rol --</option>
-                  <option value={1}>Cliente</option>
-                  <option value={2}>Soporte</option>
-                  <option value={3}>Administrador</option>
+                  <option disabled selected defaultValue={""}>-- Seleccione Rol --</option>
+                  {rol.map( r => (
+                     <option key={r.id_rol} value={r.id_rol} selected={Object.keys(props.usuario).length != 0 && props.usuario.id_rol == r.id_rol}>{r.nombre}</option>
+                  ))}
               </Form.Select>
               </div>
               <div className='mb-3'>
@@ -147,19 +153,71 @@ const ModalCrearUsuario = (props) => {
   </Modal>
 
   )
-  function crearUsuario() {
-    console.log(usuario)
+  async function crearUsuario() {
     for (let index = 0; index < Object.keys(usuario).length; index++) {
       if(Object.values(usuario)[index].length == ''){
-        console.log("almenos un campo esta vacio")
         toast.error("Debe de llenar Todos los Campos");
         return
       }      
     }
-    props.onHide()
+    const newUser = {
+      Nombre: usuario.nom,
+      Apellido: usuario.ape,
+      Telefono: usuario.telefono,
+      Email: usuario.email,
+      Contrasena: usuario.password,
+      TelContacto: usuario.contacto,
+      IdRol: parseInt(usuario.id_rol)
+    }
+    if(newUser.Telefono === newUser.TelContacto){
+      toast.error("Los telefonos deben de ser distintos");
+      return
+    }
+    const exito = await createUsuario(newUser)
+    if(typeof exito != 'number' ){
+      toast.success("Usuario Creado");
+      setTimeout(() => {
+        props.onHide();
+        window.location.reload()
+      }, 1500);
+    } else {
+      toast.error("Error Inesperado, Intente mas tarde");
+      return
+    }   
   }
-  function editarUsuario() {
-    props.onHide()
+
+  async function editarUsuario() {
+    console.log(usuario)
+    if(usuario.telefono === usuario.contacto){
+      toast.error("Los telefonos deben de ser distintos");
+      return
+    }
+    const EditUser = {
+      Nombre: usuario.nom,
+      Apellido: usuario.ape,
+      Telefono: usuario.telefono,
+      Email: usuario.email,
+      Contrasena: "",
+      TelContacto: usuario.contacto,
+      IdRol: usuario.id_rol
+    }
+    if(usuario.password == undefined){
+      EditUser.Contrasena = null
+    } else {
+      EditUser.Contrasena = usuario.password
+    }
+
+    const exito = await updateUsuario(EditUser, usuario.id_usuario)
+    if(exito == 200 ){
+      toast.success("Usuario Editado Correctamente");
+      setTimeout(() => {
+        props.onHide();
+        window.location.reload()
+      }, 1500);
+    } else {
+      toast.error("Error Inesperado, Intente mas tarde");
+      return
+    }   
   }
   function cerrarModal() {
     props.onHide()
