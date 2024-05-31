@@ -17,6 +17,15 @@ export async function getTecnicos(tec){
     }
    }
 
+export async function getTecnicosforTicket(email = ""){
+    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerTecnicos?busqueda=${email}`)
+      if(tecnic.status !== 404){
+        return tecnic.json()
+    } else {
+        return []
+    }
+}
+
    export async function getRoles() {
     const rol = await fetch(`${import.meta.env.VITE_API_URL}/Misc/ObtenerRoles`)
     return rol.json()
