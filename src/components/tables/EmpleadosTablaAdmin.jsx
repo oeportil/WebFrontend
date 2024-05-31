@@ -1,10 +1,20 @@
+import { useEffect, useState } from "react"
 import  Table  from "react-bootstrap/Table"
+import { getEmpleados } from "../../controllers/UsuariosControllers"
 
 const EmpleadosTablaAdmin = () => {
+    const[empleados, setEmpleados] = useState([])
+    useEffect(() => {
+        const empleados = async() => {
+                const emp = await getEmpleados()
+                await setEmpleados(emp)
+        }
+        empleados()
+    }, [])
   return (
     <div className="w-100 mx-1 p-4 border border-black rounded mb-2">
         <h4 className="fw-light">Empleados</h4>
-        <Table responsive="md">
+        {empleados.length != 0 ? <Table responsive="md">
             <thead>
                 <tr>
                     <th  className='bg-celeste fw-medium'>
@@ -16,16 +26,14 @@ const EmpleadosTablaAdmin = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Jose Lui</td>
-                    <td>2</td>
-                </tr>
-                <tr>
-                    <td>Bryan Farfan</td>
-                    <td>1</td>
-                </tr>
+                {empleados.map((empleado, i )=> (
+                    <tr key={i}>
+                        <td>{empleado.nombre}</td>
+                        <td>{empleado.no_tickets}</td>
+                    </tr>
+                ))}
             </tbody>
-        </Table>
+        </Table> : <div>No hay Usuarios Registrados</div>}
     </div>
   )
 }

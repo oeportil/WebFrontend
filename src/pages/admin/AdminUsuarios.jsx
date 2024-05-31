@@ -1,13 +1,28 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ModalCrearUsuario from '../../components/modales/ModalCrearUsuario';
 import '../../styles/userAdmin.css';
 import  Table  from 'react-bootstrap/Table'
+import { getTecnicos } from '../../controllers/UsuariosControllers';
 
 const Usuarios = () => {
   const [modalShow, setModalShow] = useState(false);
+  const[Tecnicos, setTecnicos] = useState([])
+  const[selected, setSelected] = useState({})
+  useEffect(() => {
+    const data = async()=>{
+      const tec = await getTecnicos()
+      setTecnicos(tec)
+    } 
+    data()
+  }, [])
+  function crearUser() {
+    setSelected({})
+    setModalShow(true)
+  }
+ 
   return (
     <main className='container my-4'>
         <Form.Select className='select' aria-label="Default select example">
@@ -30,15 +45,16 @@ const Usuarios = () => {
                 </Button>
               </InputGroup>
 
-            <Button className='Au__boton' onClick={() => setModalShow(true)}>
+            <Button className='Au__boton' onClick={() => crearUser()}>
               Agregar Usuario
             </Button>
             <ModalCrearUsuario
               show={modalShow}
               onHide={() => setModalShow(false)}
+              usuario={selected}
             />
           </div>
-          <Table responsive="md">
+          {Tecnicos.length != 0 ? <Table responsive="md">
             <thead>
                 <tr>
                     <th >
@@ -53,12 +69,13 @@ const Usuarios = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Pedro</td>
-                    <td>4856982</td>
-                    <td>correo@correo.com</td>
+              {Tecnicos.map(tecnico => (
+                <tr key={tecnico.id_usuario}>
+                    <td>{tecnico.nombre}</td>
+                    <td>{tecnico.telefono}</td>
+                    <td>{tecnico.email}</td>
                     <td>
-                      <button onClick={() => setModalShow(true)} className='nada'>
+                      <button onClick={() => editarUsuario(tecnico)} className='nada'>
                         <i className="bi bi-pencil-square"></i>
                       </button>
                       <button className='nada'>
@@ -67,11 +84,17 @@ const Usuarios = () => {
 
                     </td>
                 </tr>
+                
+              ))}   
             </tbody>
-        </Table>
+          </Table>: <div>No Hay Usuarios Disponibles</div>}
         </div>
     </main>
   )
+  function editarUsuario(tecnico){
+    setModalShow(true)
+    setSelected(tecnico)
+  }
 }
 
 export default Usuarios

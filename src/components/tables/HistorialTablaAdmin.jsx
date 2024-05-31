@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
 import  Table  from 'react-bootstrap/Table'
+import { getTicketsDasAdmin } from '../../controllers/TicketsController'
 
 const HistorialTablaAdmin = () => {
+    const [Tickets, setTickets] = useState([])
+    useEffect(() => {
+        const data = async() =>{
+            const ticket = await getTicketsDasAdmin()
+            await setTickets(ticket)
+        }   
+        data()
+    }, [])
+    console.log(Tickets)
   return (
-    <div  className="w-100 mx-1 p-4 border border-black rounded mb-2"> 
+    <div  className="w-100 mx-1 p-4 bo  rder border-black rounded mb-2"> 
         <h4 className="fw-light">Historial de ultmimos Tickets creados</h4>
-        <Table responsive="md">
+        {Tickets.length != 0 ? <Table responsive="md">
             <thead>
                 <tr>
                     <th className='bg-celeste fw-medium'>
@@ -20,18 +31,15 @@ const HistorialTablaAdmin = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Lorem</td>
-                    <td>00/00/00</td>
-                    <td>Pedro</td>
-                </tr>
-                <tr>
-                    <td>Lorem</td>
-                    <td>00/00/00</td>
-                    <td>Xavier</td>
-                </tr>
+                {Tickets.map(ticket => (
+                    <tr>
+                        <td>{ticket.servicio}</td>
+                        <td>{ticket.fecha}</td>
+                        <td>{ticket.empleado}</td>
+                    </tr>
+                ))}
             </tbody>
-        </Table>        
+        </Table> : <div>No hay Tickets Creados</div>}       
     </div>
   )
 }
