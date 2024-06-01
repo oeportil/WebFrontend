@@ -66,7 +66,6 @@ const AdminTickets = () => {
     };
     datatar();
   }, [tipoTarea, nombreTarea, idTicketTarea]);
-  console.log(tickets)
   return (
     <main className="container my-3">
       <h4 className="text-center text-uppercase txt_azul fw-normal">
