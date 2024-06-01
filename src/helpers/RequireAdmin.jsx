@@ -8,7 +8,7 @@ const RequireAdmin = ({ children }) => {
     const user = JSON.parse(locale)
     const usuario = { id_rol: user.tipo }; 
     // Verifica si el usuario es administrador
-    if (usuario.id_rol !== 3 && location.pathname.includes("/dashboard/admin")) {
+    if (usuario.id_rol == 1 && location.pathname.includes("/dashboard/admin")) {
       return <Navigate to="/dashboard/user" replace />;
     }
     if (usuario.id_rol === 3 && location.pathname.includes("/dashboard/user")) {

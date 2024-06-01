@@ -36,7 +36,7 @@ const Header = () => {
                 Home
               </Link>
             </Nav.Item>
-            {tipo == 3 && <Nav.Item className="text-white"> 
+            {tipo != 1 && <Nav.Item className="text-white"> 
               <Link to={"/dashboard/admin/tickets"} className="text-decoration-none">
                 Tickets
               </Link>
