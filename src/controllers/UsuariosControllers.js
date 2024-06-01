@@ -8,8 +8,8 @@ export async function getEmpleados(){
         return []
     }
 }  
-export async function getTecnicos(tec){
-    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerUsus/${tec}`)
+export async function getTecnicos(tec, email =""){
+    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerUsus/${tec}?busqueda=${email}`)
     if(tecnic.status !== 404){
         return tecnic.json()
     } else {

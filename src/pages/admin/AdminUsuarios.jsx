@@ -17,6 +17,7 @@ const Usuarios = () => {
   const [selected, setSelected] = useState({});
   const [rol, setRol] = useState([]);
   const [email, setEmail] = useState("");
+  const[rselected, setRselected] = useState(2);
   useEffect(() => {
     const data = async () => {
       const tec = await getTecnicos(2);
@@ -30,15 +31,18 @@ const Usuarios = () => {
     };
     datar();
   }, []);
+
   function crearUser() {
     setSelected({});
     setModalShow(true);
   }
   async function filtrarEmail() {
-    const tec = await getTecnicosByEmail(email);
+    console.log(rselected)
+    const tec = await getTecnicos(rselected, email);
     setTecnicos(tec);
   }
   async function handleChange(e) {
+    setRselected(parseInt(e.target.value))
     const tec = await getTecnicos(parseInt(e.target.value))
     setTecnicos(tec)
   }
@@ -52,7 +56,7 @@ const Usuarios = () => {
         defaultValue={2}
       >
         {rol.map((r) => (
-          <option key={r.id_rol} value={r.id_rol} selected={2 == r.id_rol}>
+          <option key={r.id_rol} value={r.id_rol} selected={ 2 == r.id_rol}>
             {r.nombre}
           </option>
         ))}
