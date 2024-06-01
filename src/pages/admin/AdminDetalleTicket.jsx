@@ -5,7 +5,7 @@ import CardsNotiTickets from "../../components/cards/CardsNotiTickets";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ModalAsignarTarea from "../../components/modales/ModalAsignarTarea";
-import { changeEstado, getDetalleTicket, getEstados } from "../../controllers/TicketsController";
+import { changeEstado, EnviarNotificaciones, getDetalleTicket, getEstados } from "../../controllers/TicketsController";
 import { crearTarea, getPrioridades } from "../../controllers/TareasController";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -98,17 +98,43 @@ const AdminDetalleTicket = () => {
       setNotificationFormData({...notificationFormData, [e.target.name]: e.target.value})
   }
 
-  const handleSendNotification = (e) => {
+  const handleSendNotification = async(e) => {
     e.preventDefault();
-    console.log(e.target.elements.Informacion.value)
-    console.log(e.target.elements.notifyClient.value)
-    console.log(e.target.elements.file.files[0])
 
-    //  const form = new FormData()
-    //  form.append("informacion", e.target.elements.Informacion.value)
-    //  form.append("")
-    
-  
+    const {id_usuario} = JSON.parse(localStorage.getItem("userData"))
+
+    const form = new FormData()
+
+    form.append("dato", e.target.elements.Informacion.value)
+    form.append("id_remitente", parseInt(id_usuario))
+    form.append("notificar_cliente", e.target.elements.notifyClient.checked)
+    form.append("archivo", e.target.elements.file.files[0])
+
+    const camposRequeridos = [
+      "dato",
+      "id_remitente",
+      "notificar_cliente",
+    ];
+    const faltanCampos = [];
+    camposRequeridos.forEach((campo) => {
+      if (!form.has(campo) || form.get(campo) === "") {
+        faltanCampos.push(campo);
+      }
+    });
+    if (faltanCampos.length > 0) {
+      toast.error("Faltan Campos que Llenar");
+
+      return;
+    }
+    const exito = await EnviarNotificaciones(id, form)
+    if(exito == 200){
+      toast.success("Notificacion Enviada con Exito")
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500);
+    } else {
+      toast.error(`Error al Enviar una Notificacion, intente mas tarde`);
+    }
   };
 
   //Verificar que un objeto esta vacio y meter el loader

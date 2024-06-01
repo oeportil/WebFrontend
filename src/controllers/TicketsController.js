@@ -75,3 +75,11 @@ export async function changeEstado(id, state) {
     })
     return estado.status
 }
+
+export async function EnviarNotificaciones(id_ticket, form) {
+    const noti = await fetch(`${import.meta.env.VITE_API_URL}/Misc/Comentar/${id_ticket}`,{
+        method: 'POST',
+        body: form
+    })
+    return noti.status
+}
