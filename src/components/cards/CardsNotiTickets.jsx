@@ -1,6 +1,7 @@
 import Card from 'react-bootstrap/Card';
 
-const CardsNotiTickets = () => {
+const CardsNotiTickets = ({notificacion}) => {
+  console.log(notificacion)
   return (
     <Card className='my-3'>
         <Card.Body>

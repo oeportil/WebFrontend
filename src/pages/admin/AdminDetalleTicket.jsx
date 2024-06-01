@@ -2,10 +2,10 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import CardsTareasTickets from "../../components/cards/CardsTareasTickets";
 import CardsNotiTickets from "../../components/cards/CardsNotiTickets";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ModalAsignarTarea from "../../components/modales/ModalAsignarTarea";
-import { getDetalleTicket, getEstados } from "../../controllers/TicketsController";
+import { changeEstado, getDetalleTicket, getEstados } from "../../controllers/TicketsController";
 import { crearTarea, getPrioridades } from "../../controllers/TareasController";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -57,6 +57,7 @@ const AdminDetalleTicket = () => {
         return  
       }     
     } 
+
     const nuevaTarea = {...taskFormData, id_encargado: parseInt(encargado), id_ticket: parseInt(id)}
     const exito = await crearTarea(nuevaTarea)
     if(exito == 200){
@@ -69,10 +70,36 @@ const AdminDetalleTicket = () => {
     }
   };
 
+  const navigate = useNavigate();
+  const handleCambiarEstado = async(e) => {
+    e.preventDefault()
+    const {id_usuario} = JSON.parse(localStorage.getItem("userData"))
+    const cambiarEstado = {
+      id: id_usuario,
+      estado: e.target[1].value
+    }    
+    const exito = await changeEstado(id, cambiarEstado)
+    if(exito == 200){
+      toast.success("Se cambio el estado con exito")
+      setTimeout(() => {
+       if(cambiarEstado.estado === "RESUELTO"){
+        navigate("/dashboard/admin/tickets")
+       } else {
+        window.location.reload()
+       }
+      }, 1500);
+    } else {
+      toast.error("Error al cambiar estado, intentelo mas tarde")
+    }
+  }
+
+
   const handleSendNotification = (e) => {
     e.preventDefault();
     console.log("Enviando notificación:", notificationFormData);
   };
+
+  //Verificar que un objeto esta vacio y meter el loader
   if(Object.keys(ticket).length == 0){
     return (
       <div className="d-flex justify-content-center align-items-center my-5">
@@ -80,6 +107,8 @@ const AdminDetalleTicket = () => {
       </div>
     )
   }
+
+
   return (
     <main className="container my-3">
       <h2 className="text-center txt_azul">TICKET Nº {id}</h2>
@@ -192,7 +221,7 @@ const AdminDetalleTicket = () => {
           />
         </div>
       </div>
-      <Form>
+      <Form onSubmit={handleCambiarEstado}>
         <div className="grid_modal_3 align-items-center">
           <div className="mb-3">
             <Form.Label htmlFor="Encargado">Encargado</Form.Label>
@@ -216,7 +245,7 @@ const AdminDetalleTicket = () => {
               ))}
             </Form.Select>
           </div>
-          <Button className="mt-3 bg-azulOscuro border-0 rounded-5">
+          <Button type="submit" className="mt-3 bg-azulOscuro border-0 rounded-5">
             Cambiar Estado
           </Button>
         </div>
@@ -279,7 +308,11 @@ const AdminDetalleTicket = () => {
         />
       </Form>
       <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>
-      <CardsNotiTickets />
+      <div className="overflow-y-scroll my-3" style={{height: "300px"}}>
+        {ticket.notificaciones.map( (noti, i)  => (
+          <CardsNotiTickets key={i} notificacion={noti} />
+        ))}
+      </div>      
       <h3>Enviar Notificacion</h3>
       <Form onSubmit={handleSendNotification}>
         <div className="d-md-flex justify-content-between gap-4">
@@ -309,12 +342,12 @@ const AdminDetalleTicket = () => {
       </Form>
       <ToastContainer
               autoClose={2000}
-              transition:Slide
-              
+              transition:Slide              
               theme="colored"
             />
     </main>
   );
+ 
 };
 
 export default AdminDetalleTicket;

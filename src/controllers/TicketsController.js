@@ -64,3 +64,14 @@ export async function getEstados() {
     const estados = await fetch(`${import.meta.env.VITE_API_URL}/Misc/ObtenerEstados`)
     return estados.json()
 }
+
+export async function changeEstado(id, state) {
+    const estado = await fetch(`${import.meta.env.VITE_API_URL}/Ticket/EditarTicket/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(state),
+        headers: {
+            'Content-Type': 'application/json',
+          }
+    })
+    return estado.status
+}
