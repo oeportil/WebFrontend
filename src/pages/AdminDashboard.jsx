@@ -16,7 +16,6 @@ const AdminDashboard = () => {
     }
     data()
   }, [])
-  console.log(estadisticas)
   return (
     <main className='container-md mt-5 mb-5'>
         <div className='d-md-flex justify-content-between '>

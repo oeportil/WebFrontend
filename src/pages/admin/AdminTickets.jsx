@@ -66,22 +66,13 @@ const AdminTickets = () => {
     };
     datatar();
   }, [tipoTarea, nombreTarea, idTicketTarea]);
-
+  console.log(tickets)
   return (
     <main className="container my-3">
       <h4 className="text-center text-uppercase txt_azul fw-normal">
         Tickets Asignados
       </h4>
       <div className="d-md-flex justify-content-between">
-        {/*
-            <Form.Control
-                type="buscarID"
-                id="inputbuscarID"
-                aria-describedby="buscarIDHelpBlock"
-                placeholder="Buscar por Id"
-                className="buscar mt-2"
-            />
-        */}
         <Form.Select
           className="select mt-2"
           aria-label="Default select example"
@@ -109,14 +100,14 @@ const AdminTickets = () => {
           <tbody>
             {tickets.map((ticket) => (
               <tr>
-                <td>{ticket.Id}</td>
-                <td>{ticket.Servicio}</td>
-                <td>{ticket.Cliente}</td>
-                <td>{ticket.Correo}</td>
+                <td>{ticket.id}</td>
+                <td>{ticket.servicio}</td>
+                <td>{ticket.cliente}</td>
+                <td>{ticket.correo}</td>
                 <td>
                   <Link
                     className="txt_azul"
-                    to={`/dashboard/admin/tickets/${ticket.Id}`}
+                    to={`/dashboard/admin/tickets/${ticket.id}`}
                   >
                     Editar Ticket
                   </Link>
@@ -124,23 +115,6 @@ const AdminTickets = () => {
               </tr>
             ))}
           </tbody>
-          {/*<tbody>
-            <tr>
-              <td>12</td>
-              <td>Service</td>
-              <td>Pedro</td>
-              <td>correo@correo.com</td>
-              <td>
-                <Link
-                  className="txt_azul"
-                  to={`/dashboard/admin/tickets/${12}`}
-                >
-                  Editar Ticket
-                </Link>
-              </td>
-            </tr>
-          </tbody>
-        */}
         </Table>
       ) : (
         <div>

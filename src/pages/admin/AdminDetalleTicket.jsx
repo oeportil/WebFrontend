@@ -3,12 +3,14 @@ import Button from "react-bootstrap/Button";
 import CardsTareasTickets from "../../components/cards/CardsTareasTickets";
 import CardsNotiTickets from "../../components/cards/CardsNotiTickets";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalAsignarTarea from "../../components/modales/ModalAsignarTarea";
+import { getDetalleTicket } from "../../controllers/TicketsController";
 
 const AdminDetalleTicket = () => {
   const { id } = useParams();
   const [modalShow, setModalShow] = useState(false);
+  const [ticket, setTicket] = useState({})
   const [taskFormData, setTaskFormData] = useState({
     name: "",
     priority: "",
@@ -19,6 +21,15 @@ const AdminDetalleTicket = () => {
     file: null,
     notifyClient: false
   });
+  
+  useEffect(() => {
+    const data = async() =>{
+      const tas = await getDetalleTicket(id)
+      setTicket(tas)
+    }
+    data()
+  }, [])
+  console.log(ticket)
 
   const handleCreateTask = (e) => {
     e.preventDefault();
@@ -30,6 +41,7 @@ const AdminDetalleTicket = () => {
     e.preventDefault();
     console.log("Enviando notificación:", notificationFormData);
   };
+
   return (
     <main className="container my-3">
       <h2 className="text-center txt_azul">TICKET Nº {id}</h2>
@@ -39,8 +51,10 @@ const AdminDetalleTicket = () => {
           <Form.Control
             type="text"
             id="Nombre"
+            value={ticket.clienteNombre}
             aria-describedby="nombreHelpBlock"
             className="rounded-5 border-dark"
+            disabled
           />
         </div>
         <div className="mb-3">
@@ -50,6 +64,8 @@ const AdminDetalleTicket = () => {
             id="Apellido"
             aria-describedby="apellidoHelpBlock"
             className="rounded-5 border-dark"
+            disabled
+            value={ticket.clienteApellido}
           />
         </div>
         <div className="mb-3">
@@ -59,6 +75,8 @@ const AdminDetalleTicket = () => {
             id="Telefono"
             aria-describedby="telefonoHelpBlock"
             className="rounded-5 border-dark"
+            disabled
+            value={ticket.clienteTelefono}
           />
         </div>
       </div>
@@ -72,6 +90,8 @@ const AdminDetalleTicket = () => {
             id="NombreApp"
             aria-describedby="nombreAppHelpBlock"
             className="rounded-5 border-dark"
+            disabled
+            value={ticket.servicio}
           />
         </div>
         <div className="mb-3">
@@ -81,6 +101,8 @@ const AdminDetalleTicket = () => {
             id="Estado"
             aria-describedby="EstadoHelpBlock"
             className="rounded-5 border-dark"
+            disabled
+            value={ticket.estado}
           />
         </div>
         <div className="mb-3">
@@ -90,15 +112,19 @@ const AdminDetalleTicket = () => {
             id="Prioridad"
             aria-describedby="PrioridadHelpBlock"
             className="rounded-5 border-dark"
+            disabled
+            value={ticket.prioridad}
           />
         </div>
         <div className="mb-3">
           <Form.Label htmlFor="Fecha">Fecha de Creacion</Form.Label>
           <Form.Control
-            type="date"
+            type="text"
             id="Fecha"
             aria-describedby="FechaHelpBlock"
             className="rounded-5 border-dark"
+            disabled
+            value={ticket.fecha}
           />
         </div>
       </div>
@@ -111,6 +137,8 @@ const AdminDetalleTicket = () => {
             aria-describedby="descriptHelpBlock"
             className="rounded-5 border-dark"
             style={{ height: "100px" }}
+            disabled
+            value={ticket.descripcion}
           />
         </div>
         <div className="mb-3">
@@ -121,6 +149,8 @@ const AdminDetalleTicket = () => {
             aria-describedby="archivosHelpBlock"
             className="rounded-5 border-dark"
             style={{ height: "100px" }}
+            disabled
+            value={ticket.archivos[0]}
           />
         </div>
       </div>
@@ -133,6 +163,8 @@ const AdminDetalleTicket = () => {
               id="Encargado"
               aria-describedby="EncargadoHelpBlock"
               className="rounded-5 border-dark"
+              disabled
+              value={ticket.encargado}
             />
           </div>
           <div className="mb-3">

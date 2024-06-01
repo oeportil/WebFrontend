@@ -50,3 +50,12 @@ export async function getEstadisticas(){
     const resultado = await estadisticas.json()
     return resultado
 }
+
+export async function getDetalleTicket(id){
+    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/Ticket/ObtenerDetalle/${id}`)
+    if(tickets.status !== 404){
+        return tickets.json()
+    } else {
+        return {}
+    }
+}
