@@ -5,16 +5,22 @@ import CardsNotiTickets from "../../components/cards/CardsNotiTickets";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ModalAsignarTarea from "../../components/modales/ModalAsignarTarea";
-import { getDetalleTicket } from "../../controllers/TicketsController";
+import { getDetalleTicket, getEstados } from "../../controllers/TicketsController";
+import { crearTarea, getPrioridades } from "../../controllers/TareasController";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminDetalleTicket = () => {
   const { id } = useParams();
   const [modalShow, setModalShow] = useState(false);
   const [ticket, setTicket] = useState({})
+  const[estados, setEstados] = useState([])
+  const[prioridades, setPrioridades] = useState([])
   const [taskFormData, setTaskFormData] = useState({
-    name: "",
-    priority: "",
-    description: ""
+    nombre: "",
+    prioridad: "",
+    info: ""
   });
   const [notificationFormData, setNotificationFormData] = useState({
     information: "",
@@ -28,20 +34,52 @@ const AdminDetalleTicket = () => {
       setTicket(tas)
     }
     data()
+    const est = async()  =>{
+      const e = await getEstados()
+      setEstados(e)
+    }
+    est()
+    const priori = async() =>{
+      const pr = await getPrioridades()
+      setPrioridades(pr)
+    }
+    priori()
   }, [])
-  console.log(ticket)
+ 
+  const handleChangeTarea = e =>{
+    setTaskFormData({...taskFormData, [e.target.name]: e.target.value})
+  } 
 
-  const handleCreateTask = (e) => {
-    e.preventDefault();
-    console.log("Creando tarea:", taskFormData);
-    setModalShow(true)
+  const handleValidation = async(encargado) => {
+    for (let index = 0; index < Object.keys(taskFormData).length; index++) {
+      if(Object.values(taskFormData)[index].length == 0){
+        toast.error("Hay Campos Vacios")
+        return  
+      }     
+    } 
+    const nuevaTarea = {...taskFormData, id_encargado: parseInt(encargado), id_ticket: parseInt(id)}
+    const exito = await crearTarea(nuevaTarea)
+    if(exito == 200){
+      toast.success("Tarea Creada con Exito")
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500);
+    } else {
+      toast.error("Error al crear tarea, intentelo mas tarde")
+    }
   };
 
   const handleSendNotification = (e) => {
     e.preventDefault();
     console.log("Enviando notificación:", notificationFormData);
   };
-
+  if(Object.keys(ticket).length == 0){
+    return (
+      <div className="d-flex justify-content-center align-items-center my-5">
+        <div className="loader"></div>
+      </div>
+    )
+  }
   return (
     <main className="container my-3">
       <h2 className="text-center txt_azul">TICKET Nº {id}</h2>
@@ -62,7 +100,7 @@ const AdminDetalleTicket = () => {
           <Form.Control
             type="text"
             id="Apellido"
-            aria-describedby="apellidoHelpBlock"
+            aria-describedby="apellidoHelpBlock"  
             className="rounded-5 border-dark"
             disabled
             value={ticket.clienteApellido}
@@ -173,10 +211,9 @@ const AdminDetalleTicket = () => {
               className="rounded-5 border-dark"
               aria-label="Default select example"
             >
-              <option>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              {estados.map((estado, i) => (
+                  <option key={i} value={estado}>{estado}</option>
+              ))}
             </Form.Select>
           </div>
           <Button className="mt-3 bg-azulOscuro border-0 rounded-5">
@@ -185,17 +222,22 @@ const AdminDetalleTicket = () => {
         </div>
       </Form>
       <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
-      <CardsTareasTickets />
+      {ticket.tareas.map((tarea, i) =>(
+        <CardsTareasTickets tarea={tarea} key={i}/>
+      ))}
       <h3>Crear Tarea</h3>
-      <Form onSubmit={handleCreateTask} className="mb-3">
+      <Form onSubmit={(e) => e.preventDefault()} className="mb-3">
         <div className="grid_modal_2">
           <div className="mb-3">
             <Form.Label htmlFor="tareNombre">Nombre</Form.Label>
             <Form.Control
               type="text"
               id="tareNombre"
+              name="nombre"
               aria-describedby="tareNombreHelpBlock"
               className="rounded-5 border-dark"
+              value={taskFormData.nombre}
+              onChange={handleChangeTarea}
             />
           </div>
           <div className="mb-3">
@@ -203,11 +245,14 @@ const AdminDetalleTicket = () => {
             <Form.Select
               className="rounded-5 border-dark"
               aria-label="Default select example"
+              name="prioridad"
+              value={taskFormData.prioridad}
+              onChange={handleChangeTarea}
             >
-              <option>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option disabled value={""}>--Seleccione Una Opcion--</option>
+              {prioridades.map((prioridad, i) => (
+                  <option key={i} value={prioridad}>{prioridad}</option>
+              ))}
             </Form.Select>
           </div>
         </div>
@@ -219,14 +264,18 @@ const AdminDetalleTicket = () => {
             aria-describedby="DescripcionTareaHelpBlock"
             className="rounded-5 border-dark"
             style={{ height: "100px" }}
+            name="info"
+            value={taskFormData.info}
+            onChange={handleChangeTarea}
           />
         </div>
-        <Button type="submit" className="mt-3 bg-azulOscuro border-0 rounded-5 boton-25">
+        <Button onClick={() => setModalShow(true)} className="mt-3 bg-azulOscuro border-0 rounded-5 boton-25">
             Crear y Asignar Tarea
         </Button>
         <ModalAsignarTarea
              show={modalShow}
-        onHide={() => setModalShow(false)}
+             onHide={() => setModalShow(false)}
+             tarea={handleValidation}
         />
       </Form>
       <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>
@@ -258,6 +307,12 @@ const AdminDetalleTicket = () => {
           </div>
         </div>
       </Form>
+      <ToastContainer
+              autoClose={2000}
+              transition:Slide
+              
+              theme="colored"
+            />
     </main>
   );
 };

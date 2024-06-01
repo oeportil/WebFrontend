@@ -63,7 +63,7 @@ export async function getTecnicosforTicket(email = ""){
     }
    }
 
-   export async function getTecnicosByEmail(email){
+   export async function getTecnicosByEmail(email=""){
         const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerUsus/2?busqueda=${email}`)
         if(tecnic.status != 404){
             const resultado = await tecnic.json()

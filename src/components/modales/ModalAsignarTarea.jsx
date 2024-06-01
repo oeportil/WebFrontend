@@ -2,11 +2,23 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Table from "react-bootstrap/Table"
 import Form from "react-bootstrap/Form"
+import { useEffect, useState } from 'react';
+import { getTecnicosByEmail } from '../../controllers/UsuariosControllers';
 
 const ModalAsignarTarea = (props) => {
+  const[tecnicos, setTecnicos] = useState([])
+
+  useEffect(() => {
+    const data = async() =>{
+      const tec = await getTecnicosByEmail()
+      setTecnicos(tec)
+    }
+    data()
+  }, [])
+
   return (
     <Modal
-    {...props}
+    show={props.show} onHide={props.onHide}
     size="xl"
     aria-labelledby="contained-modal-title-vcenter"
     centered
@@ -40,16 +52,18 @@ const ModalAsignarTarea = (props) => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Pedro</td>
-                    <td>12312</td>
-                    <td>pedro@correo.com</td>
-                    <td>
-                        <button className="border-0 bg-none txt_azul">
-                            Asignar
-                        </button>
-                    </td>        
+              {tecnicos.map(tecnico =>(
+                <tr key={tecnico.id_usuario}>
+                  <td>{tecnico.nombre}</td>
+                  <td>{tecnico.telefono}</td>
+                  <td>{tecnico.email}</td>
+                  <td>
+                      <button onClick={() => props.tarea(tecnico.id_usuario)} className="border-0 bg-none txt_azul">
+                          Asignar
+                      </button>
+                  </td>        
                 </tr>
+              ))}                
             </tbody>
         </Table>
        </div>
@@ -59,6 +73,7 @@ const ModalAsignarTarea = (props) => {
     </Modal.Footer>
   </Modal>
   )
+
 }
 
 export default ModalAsignarTarea

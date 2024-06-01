@@ -59,3 +59,8 @@ export async function getDetalleTicket(id){
         return {}
     }
 }
+
+export async function getEstados() {
+    const estados = await fetch(`${import.meta.env.VITE_API_URL}/Misc/ObtenerEstados`)
+    return estados.json()
+}
