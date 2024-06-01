@@ -43,6 +43,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
 
     obtenerDetalle();
   }, [idTicket]);
+  console.log(detalleTicket);
   const archivoExiste =
     detalleTicket?.archivos?.length > 0
       ? detalleTicket.archivos[0]
@@ -226,7 +227,10 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
           </div>
         </Form>
         <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
-        <CardsTareasTickets />
+        {detalleTicket?.tareas.map((tarea) => (
+          <CardsTareasTickets key={tarea} tarea={tarea} />
+        ))}
+
         <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>
         <CardsNotiTickets />
         <h3>Enviar Notificacion</h3>
