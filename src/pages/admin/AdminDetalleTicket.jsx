@@ -93,10 +93,22 @@ const AdminDetalleTicket = () => {
     }
   }
 
+  const handleChangeNoti = e =>{
+    console.log(e.target.value)
+      setNotificationFormData({...notificationFormData, [e.target.name]: e.target.value})
+  }
 
   const handleSendNotification = (e) => {
     e.preventDefault();
-    console.log("Enviando notificación:", notificationFormData);
+    console.log(e.target.elements.Informacion.value)
+    console.log(e.target.elements.notifyClient.value)
+    console.log(e.target.elements.file.files[0])
+
+    //  const form = new FormData()
+    //  form.append("informacion", e.target.elements.Informacion.value)
+    //  form.append("")
+    
+  
   };
 
   //Verificar que un objeto esta vacio y meter el loader
@@ -324,14 +336,27 @@ const AdminDetalleTicket = () => {
               aria-describedby="InformacionHelpBlock"
               className="rounded-5 border-dark"
               style={{ height: "100px" }}
+              name="information"
+              // value={notificationFormData.information}
+              // onChange={handleChangeNoti}
             />
           </div>
           <div className="buscar">
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Envio de Archivo (Opcional)</Form.Label>
-              <Form.Control type="file" />
+              <Form.Control
+               type="file"
+               name="file"
+              //  value={notificationFormData.file}
+              //  onChange={handleChangeNoti}
+               />
             </Form.Group>
-            <Form.Check inline label="Notificar al Cliente" />
+            <Form.Check 
+            id="notifyClient"
+            name="notifyClient"
+            // value={notificationFormData.notifyClient}
+            // onChange={handleChangeNoti} 
+            inline label="Notificar al Cliente" />
             <div>
               <Button type="submit" className="mt-3 bg-azulOscuro border-0 rounded-5 w-100">
                 Enviar Notificacion

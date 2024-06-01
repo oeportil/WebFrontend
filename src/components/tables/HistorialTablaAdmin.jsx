@@ -7,6 +7,7 @@ import ModalAsignarTicket from '../modales/ModalAsignarTicket'
 const HistorialTablaAdmin = () => {
     const [Tickets, setTickets] = useState([])
     const [modalShow, setModalShow] = useState(false);
+    const[asignado, setAsignado] = useState(0);
     useEffect(() => {
         const data = async() =>{
             const ticket = await getTicketsDasAdmin()
@@ -38,23 +39,28 @@ const HistorialTablaAdmin = () => {
                         <td>{ticket.fecha}</td>
                         <td>{ticket.empleado != null ? ticket.empleado : 
                         <div>
-                            <button className="border-0 bg-none d-flex gap-2 txt_azul"  onClick={() => setModalShow(true)}>
+                            <button className="border-0 bg-none d-flex gap-2 txt_azul"  onClick={() => asignarTicket(ticket.id)}>
                                 <p>Asignar</p>
                             </button>
-                                <ModalAsignarTicket
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
-                                id={ticket.id}                       
-                                />
+                                
                         </div>
                         }</td>
                         
                     </tr>
                 ))}
             </tbody>
+            <ModalAsignarTicket
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            id={asignado}                       
+            />
         </Table> : <div>No hay Tickets Creados</div>}       
     </div>
   )
+  function asignarTicket(num){
+    setAsignado(num)
+    setModalShow(true)
+  }
 }
 
 export default HistorialTablaAdmin

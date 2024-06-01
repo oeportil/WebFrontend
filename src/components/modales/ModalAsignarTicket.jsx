@@ -40,7 +40,6 @@ const ModalAsignarTicket = (props) => {
       return
     }   
   }
-
   return (
     <Modal
       {...props}

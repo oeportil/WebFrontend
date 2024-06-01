@@ -7,6 +7,7 @@ import { getTicketsSinAsignar } from "../../controllers/TicketsController";
 const AsignacionTickets = () => {
     const [modalShow, setModalShow] = useState(false);
     const [tsAsginar, setTsAsignar] = useState([]);
+    const[asignado, setAsignado] = useState(0);
     
 
     useEffect(() => {
@@ -49,22 +50,26 @@ const AsignacionTickets = () => {
                     <td>{ticket.correo}</td>
                     <td>{ticket.fecha}</td>
                     <td>
-                        <button className="border-0 bg-none d-flex gap-2 txt_azul"  onClick={() => setModalShow(true)}>
+                        <button className="border-0 bg-none d-flex gap-2 txt_azul"  onClick={() => asignarTicket(ticket.id)}>
                             <p>Asignar</p> <i className="bi bi-arrow-right mt-1"></i>
                         </button>
-                        <ModalAsignarTicket
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                        id={ticket.id}                       
-                        />
                     </td>                    
                 </tr>
                 ))}
             </tbody>
+            <ModalAsignarTicket
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            id={asignado}                       
+            />
              </Table>: <div>No hay Tickets Para Asignar</div>}
        </div>
     </main>
   )
+  function asignarTicket(num){
+    setAsignado(num)
+    setModalShow(true)
+  }
 }
 
 export default AsignacionTickets

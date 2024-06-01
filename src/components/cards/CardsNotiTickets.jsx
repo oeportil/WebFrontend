@@ -1,14 +1,13 @@
 import Card from 'react-bootstrap/Card';
 
 const CardsNotiTickets = ({notificacion}) => {
-  console.log(notificacion)
   return (
     <Card className='my-3'>
         <Card.Body>
-        <Card.Subtitle className="mb-2 text-muted">generado por y fecha</Card.Subtitle>
+        <Card.Subtitle className="mb-2 text-muted">{notificacion.remitente} - {notificacion.fecha}</Card.Subtitle>
         <div className='d-md-flex justify-content-between '>
-            <Card.Text>Descripcion</Card.Text>
-            <Card.Text>Si Hay archivo</Card.Text>
+            <Card.Text>{notificacion.dato}</Card.Text>
+            <Card.Text>{notificacion.urlArchivo}</Card.Text>
         </div>
         </Card.Body>
     </Card>
