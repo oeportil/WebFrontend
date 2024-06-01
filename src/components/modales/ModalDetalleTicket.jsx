@@ -1,23 +1,60 @@
-import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import CardsTareasTickets from "../cards/CardsTareasTickets";
 import CardsNotiTickets from "../cards/CardsNotiTickets";
+import { useState, useEffect, useRef } from "react";
 
-const ModalDetalleTicket = (props) => {
+const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   const userDataString = JSON.parse(localStorage.getItem("userData"));
   const [fullscreen, setFullscreen] = useState(true);
+  const [detalleTicket, setDetalleTicket] = useState({});
+
+  const isFirstRender = useRef(true);
+  //aca se toma el ticekt
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Marca como no primer render después de la primera ejecución
+      return; // Salir del useEffect en el primer render
+    }
+
+    let url = "";
+    if (userDataString.tipo === 1) {
+      url = `${
+        import.meta.env.VITE_API_URL
+      }/Ticket/ObtenerDetalleCliente/${idTicket}`;
+    } else {
+      url = `${import.meta.env.VITE_API_URL}/Ticket/ObtenerDetalle/${idTicket}`;
+    }
+
+    const obtenerDetalle = async () => {
+      if (idTicket) {
+        const LlamadoDetalle = await fetch(url);
+        if (LlamadoDetalle.status !== 404) {
+          const detalle = await LlamadoDetalle.json();
+          await setDetalleTicket({});
+          await setDetalleTicket(detalle);
+        } else {
+          console.warn("Esperando Elección de ticket");
+        }
+      }
+      return;
+    };
+
+    obtenerDetalle();
+  }, [idTicket]);
+  console.log(detalleTicket);
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={onHide}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       fullscreen={fullscreen}
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <p className="text-uppercase">Ticket N° {}</p>
+          <p className="text-uppercase">Ticket N° {idTicket}</p>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -26,9 +63,11 @@ const ModalDetalleTicket = (props) => {
             <Form.Label htmlFor="Nombre">Nombre</Form.Label>
             <Form.Control
               type="text"
+              disabled={true}
               id="Nombre"
               aria-describedby="nombreHelpBlock"
               className="rounded-5 border-dark"
+              defaultValue={detalleTicket?.clienteNombre}
             />
           </div>
           <div className="mb-3">
@@ -38,6 +77,8 @@ const ModalDetalleTicket = (props) => {
               id="Apellido"
               aria-describedby="apellidoHelpBlock"
               className="rounded-5 border-dark"
+              disabled={true}
+              defaultValue={detalleTicket?.clienteApellido}
             />
           </div>
           <div className="mb-3">
@@ -47,6 +88,8 @@ const ModalDetalleTicket = (props) => {
               id="Telefono"
               aria-describedby="telefonoHelpBlock"
               className="rounded-5 border-dark"
+              disabled={true}
+              defaultValue={detalleTicket?.clienteTelefono}
             />
           </div>
         </div>
@@ -60,6 +103,8 @@ const ModalDetalleTicket = (props) => {
               id="NombreApp"
               aria-describedby="nombreAppHelpBlock"
               className="rounded-5 border-dark"
+              disabled={true}
+              defaultValue={detalleTicket?.servicio}
             />
           </div>
           <div className="mb-3">
@@ -69,6 +114,8 @@ const ModalDetalleTicket = (props) => {
               id="Estado"
               aria-describedby="EstadoHelpBlock"
               className="rounded-5 border-dark"
+              disabled={true}
+              defaultValue={detalleTicket?.estado}
             />
           </div>
           <div className="mb-3">
@@ -78,15 +125,19 @@ const ModalDetalleTicket = (props) => {
               id="Prioridad"
               aria-describedby="PrioridadHelpBlock"
               className="rounded-5 border-dark"
+              disabled={true}
+              defaultValue={detalleTicket?.prioridad}
             />
           </div>
           <div className="mb-3">
             <Form.Label htmlFor="Fecha">Fecha de Creacion</Form.Label>
             <Form.Control
-              type="date"
+              type="text"
               id="Fecha"
               aria-describedby="FechaHelpBlock"
               className="rounded-5 border-dark"
+              disabled={true}
+              defaultValue={detalleTicket?.fecha}
             />
           </div>
         </div>
@@ -99,6 +150,8 @@ const ModalDetalleTicket = (props) => {
               aria-describedby="descriptHelpBlock"
               className="rounded-5 border-dark"
               style={{ height: "100px" }}
+              disabled={true}
+              defaultValue={detalleTicket?.descripcion}
             />
           </div>
           <div className="mb-3">
@@ -109,6 +162,12 @@ const ModalDetalleTicket = (props) => {
               aria-describedby="archivosHelpBlock"
               className="rounded-5 border-dark"
               style={{ height: "100px" }}
+              disabled={true}
+              defaultValue={
+                detalleTicket?.archivos?.length > 0
+                  ? detalleTicket.archivos[0]
+                  : "No se enviaron archivos para este ticket"
+              }
             />
           </div>
         </div>
@@ -121,13 +180,18 @@ const ModalDetalleTicket = (props) => {
                 id="Encargado"
                 aria-describedby="EncargadoHelpBlock"
                 className="rounded-5 border-dark"
+                disabled={true}
+                defaultValue={
+                  !detalleTicket?.encargado
+                    ? "No hay un encargado"
+                    : detalleTicket?.encargado
+                }
               />
             </div>
             <div className="mb-3">
-              {FormData.tipo == 1 ? (
-                <p>Hola</p>
-              ) : (
+              {userDataString.tipo == 3 && (
                 <>
+                  {" "}
                   <Form.Label htmlFor="estadoChange">Cambiar Estado</Form.Label>
                   <Form.Select
                     className="rounded-5 border-dark"
@@ -141,9 +205,11 @@ const ModalDetalleTicket = (props) => {
                 </>
               )}
             </div>
-            <Button className="mt-3 bg-azulOscuro border-0 rounded-5">
-              Cambiar Estado
-            </Button>
+            {userDataString.tipo == 3 && (
+              <Button className="mt-3 bg-azulOscuro border-0 rounded-5">
+                Cambiar Estado
+              </Button>
+            )}
           </div>
         </Form>
         <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
@@ -168,7 +234,10 @@ const ModalDetalleTicket = (props) => {
                 <Form.Label>Envio de Archivo (Opcional)</Form.Label>
                 <Form.Control type="file" />
               </Form.Group>
-              <Form.Check inline label="Notificar al Cliente" />
+              {userDataString.tipo != 1 && (
+                <Form.Check inline label="Notificar al Cliente" />
+              )}
+
               <div>
                 <Button className="mt-3 bg-azulOscuro border-0 rounded-5 w-100">
                   Enviar Notificacion

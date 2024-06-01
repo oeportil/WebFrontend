@@ -7,6 +7,7 @@ import ModalDetalleTicket from "../components/modales/ModalDetalleTicket";
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
+  const [ticketID, setTicketID] = useState("");
   //aca se llama a la API
   const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
   useEffect(() => {
@@ -26,6 +27,7 @@ const Dashboard = () => {
     //llamando la función
     APIRequest();
   }, []);
+
   const [modalShow, setModalShow] = useState(false);
   const [modalDetalle, setModalDetalle] = useState(false);
   const theadContent = ["ID", "Servicio", "Fecha", "Estado"];
@@ -94,7 +96,13 @@ const Dashboard = () => {
                   </thead>
                   <tbody>
                     {tickets.map((ticket) => (
-                      <tr key={ticket.id} onClick={() => setModalDetalle(true)}>
+                      <tr
+                        key={ticket.id}
+                        onClick={() => {
+                          setModalDetalle(true);
+                          setTicketID(ticket.id);
+                        }}
+                      >
                         <td>{ticket.id}</td>
                         <td>{ticket.servicio}</td>
                         <td>{ticket.fecha}</td>
@@ -105,6 +113,7 @@ const Dashboard = () => {
                 </Table>
                 <ModalDetalleTicket
                   show={modalDetalle}
+                  idTicket={ticketID}
                   onHide={() => setModalDetalle(false)}
                 />
               </div>
