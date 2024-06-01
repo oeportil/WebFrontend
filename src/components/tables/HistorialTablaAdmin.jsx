@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import  Table  from 'react-bootstrap/Table'
 import { getTicketsDasAdmin } from '../../controllers/TicketsController'
+import ModalAsignarTicket from '../modales/ModalAsignarTicket'
 
 const HistorialTablaAdmin = () => {
     const [Tickets, setTickets] = useState([])
+    const [modalShow, setModalShow] = useState(false);
     useEffect(() => {
         const data = async() =>{
             const ticket = await getTicketsDasAdmin()
@@ -34,7 +36,19 @@ const HistorialTablaAdmin = () => {
                     <tr key={i}>
                         <td>{ticket.servicio}</td>
                         <td>{ticket.fecha}</td>
-                        <td>{ticket.empleado}</td>
+                        <td>{ticket.empleado != null ? ticket.empleado : 
+                        <div>
+                            <button className="border-0 bg-none d-flex gap-2 txt_azul"  onClick={() => setModalShow(true)}>
+                                <p>Asignar</p>
+                            </button>
+                                <ModalAsignarTicket
+                                show={modalShow}
+                                onHide={() => setModalShow(false)}
+                                id={ticket.id}                       
+                                />
+                        </div>
+                        }</td>
+                        
                     </tr>
                 ))}
             </tbody>
