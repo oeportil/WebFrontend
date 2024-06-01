@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import ModalDetalleTicket from '../modales/ModalDetalleTicket';
 
-const TablaInfoTickets = () => {
+const TablaInfoTickets = ({tickets}) => {
     const [modalShow, setModalShow] = useState(false);
   return (
     <Table responsive="lg" className="my-3 mx-2">
@@ -28,23 +28,25 @@ const TablaInfoTickets = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>12</td>
-                    <td>Tecnisismo</td>
-                    <td>Pedro</td>
-                    <td>pedro@correo.com</td>
-                    <td>dd/mm/yyyy</td>
-                    <td>
-                        <button className="border-0 bg-none txt_azul" onClick={() => setModalShow(true)}>
-                            Ver detalle
-                        </button>
-                        <ModalDetalleTicket
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                        num={12}                       
-                        />
-                    </td>                    
-                </tr>
+               {tickets.map((ticket, i) => (
+                 <tr key={i}>
+                 <td>{ticket.id}</td>
+                 <td>{ticket.servicio}</td>
+                 <td>{ticket.cliente}</td>
+                 <td>{ticket.correo}</td>
+                 <td>{ticket.fecha}</td>
+                 <td>
+                     <button className="border-0 bg-none txt_azul" onClick={() => setModalShow(true)}>
+                         Ver detalle
+                     </button>
+                     <ModalDetalleTicket
+                     show={modalShow}
+                     onHide={() => setModalShow(false)}
+                     num={12}                       
+                     />
+                 </td>                    
+             </tr>
+               ))}
             </tbody>
         </Table>
   )

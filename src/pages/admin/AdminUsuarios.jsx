@@ -37,7 +37,6 @@ const Usuarios = () => {
     setModalShow(true);
   }
   async function filtrarEmail() {
-    console.log(rselected)
     const tec = await getTecnicos(rselected, email);
     setTecnicos(tec);
   }
