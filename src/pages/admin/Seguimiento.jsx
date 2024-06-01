@@ -1,9 +1,8 @@
 // src/pages/admin/Seguimiento.jsx
 
-import React from 'react';
-import { Container, Row, Col, Form, Table } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../styles/seguimineto.css';
+import { Container, Row, Col, Form, Table } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../../styles/seguimineto.css";
 
 const Seguimiento = () => {
   return (
@@ -76,7 +75,9 @@ const Seguimiento = () => {
                 <td>Bryan Cortez</td>
                 <td>carfuen@gmail.com</td>
                 <td>14/5/2024</td>
-                <td><a href="#">Ver ticket</a></td>
+                <td>
+                  <a href="#">Ver ticket</a>
+                </td>
               </tr>
               <tr>
                 <td>105</td>
@@ -85,7 +86,9 @@ const Seguimiento = () => {
                 <td>Oscar Tejada</td>
                 <td>carfuen@gmail.com</td>
                 <td>16/5/2024</td>
-                <td><a href="#">Ver ticket</a></td>
+                <td>
+                  <a href="#">Ver ticket</a>
+                </td>
               </tr>
               <tr>
                 <td>111</td>
@@ -94,7 +97,9 @@ const Seguimiento = () => {
                 <td>José Portillo</td>
                 <td>carfuen@gmail.com</td>
                 <td>19/5/2024</td>
-                <td><a href="#">Ver ticket</a></td>
+                <td>
+                  <a href="#">Ver ticket</a>
+                </td>
               </tr>
               <tr>
                 <td>112</td>
@@ -103,7 +108,9 @@ const Seguimiento = () => {
                 <td>Andy Saravia</td>
                 <td>carfuen@gmail.com</td>
                 <td>19/5/2024</td>
-                <td><a href="#">Ver ticket</a></td>
+                <td>
+                  <a href="#">Ver ticket</a>
+                </td>
               </tr>
             </tbody>
           </Table>
