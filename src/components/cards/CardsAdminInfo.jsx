@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card'
 import ModalInfoTickets from '../modales/ModalInfoTickets';
 
 //, num, tipo, link
-const CardsAdminInfo = ({clase, num, tipo}) => {
+const CardsAdminInfo = ({clase, num, tipo, id}) => {
   const [modalShow, setModalShow] = useState(false);
   return (
     <Card className='m-2 w-100'>
@@ -19,6 +19,7 @@ const CardsAdminInfo = ({clase, num, tipo}) => {
                   show={modalShow}
                   onHide={() => setModalShow(false)}
                   titulo={tipo}
+                  tipo={id}
                 />           
             </div>
         </Card.Body>

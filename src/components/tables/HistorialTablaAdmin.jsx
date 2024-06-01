@@ -12,7 +12,6 @@ const HistorialTablaAdmin = () => {
         }   
         data()
     }, [])
-    console.log(Tickets)
   return (
     <div  className="w-100 mx-1 p-4 bo  rder border-black rounded mb-2"> 
         <h4 className="fw-light">Historial de ultmimos Tickets creados</h4>

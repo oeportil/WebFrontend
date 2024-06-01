@@ -10,15 +10,21 @@ const AdminDashboard = () => {
             <CardsAdminInfo 
             clase={"bi bi-check-circle"} 
             num={23} 
-            tipo={"Resueltos"} />
+            tipo={"Resueltos"} 
+            id={1}
+            />
             <CardsAdminInfo 
             clase={"bi bi-clock-history"} 
             num={50} 
-            tipo={"En progreso"} />
+            tipo={"En progreso"} 
+            id={2}
+            />
             <CardsAdminInfo 
             clase={"bi bi-chat-right-text"} 
             num={23} 
-            tipo={"Abiertos"}/>
+            tipo={"Abiertos"}
+            id={3}
+            />
         </div>
         <div className='d-lg-flex gap-3 mt-5'>
             <EmpleadosTablaAdmin/>
