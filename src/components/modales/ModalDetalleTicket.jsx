@@ -28,11 +28,11 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
     }
 
     const obtenerDetalle = async () => {
+      setDetalleTicket({});
       if (idTicket) {
         const LlamadoDetalle = await fetch(url);
         if (LlamadoDetalle.status !== 404) {
           const detalle = await LlamadoDetalle.json();
-          await setDetalleTicket({});
           await setDetalleTicket(detalle);
         } else {
           console.warn("Esperando Elección de ticket");
@@ -43,7 +43,21 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
 
     obtenerDetalle();
   }, [idTicket]);
-  console.log(detalleTicket);
+  const archivoExiste =
+    detalleTicket?.archivos?.length > 0
+      ? detalleTicket.archivos[0]
+      : "No se enviaron archivos para este ticket";
+  const asignadoExiste = !detalleTicket?.encargado
+    ? "No hay un encargado"
+    : detalleTicket?.encargado;
+
+  if (Object.keys(detalleTicket).length == 0) {
+    return (
+      <div className="d-flex justify-content-center align-items-center my-5">
+        <div className="loader"></div>
+      </div>
+    );
+  }
   return (
     <Modal
       show={show}
@@ -156,6 +170,12 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
           </div>
           <div className="mb-3">
             <Form.Label htmlFor="archivos">Archivos enviados:</Form.Label>
+            {archivoExiste != "No se enviaron archivos para este ticket" && (
+              <a href={archivoExiste} target="_blank">
+                Presiona para ver archivo
+              </a>
+            )}
+
             <Form.Control
               as="textarea"
               id="archivos"
@@ -163,11 +183,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
               className="rounded-5 border-dark"
               style={{ height: "100px" }}
               disabled={true}
-              defaultValue={
-                detalleTicket?.archivos?.length > 0
-                  ? detalleTicket.archivos[0]
-                  : "No se enviaron archivos para este ticket"
-              }
+              defaultValue={archivoExiste}
             />
           </div>
         </div>
@@ -175,17 +191,14 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
           <div className="grid_modal_3 align-items-center">
             <div className="mb-3">
               <Form.Label htmlFor="Encargado">Encargado</Form.Label>
+
               <Form.Control
                 type="text"
                 id="Encargado"
                 aria-describedby="EncargadoHelpBlock"
                 className="rounded-5 border-dark"
                 disabled={true}
-                defaultValue={
-                  !detalleTicket?.encargado
-                    ? "No hay un encargado"
-                    : detalleTicket?.encargado
-                }
+                defaultValue={asignadoExiste}
               />
             </div>
             <div className="mb-3">
