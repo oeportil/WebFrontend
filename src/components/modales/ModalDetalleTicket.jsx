@@ -4,23 +4,26 @@ import Button from "react-bootstrap/Button";
 import CardsTareasTickets from "../cards/CardsTareasTickets";
 import CardsNotiTickets from "../cards/CardsNotiTickets";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { EnviarNotificaciones, changeEstado } from "../../controllers/TicketsController";
+import {
+  EnviarNotificaciones,
+  changeEstado,
+} from "../../controllers/TicketsController";
 import { obtenerDetalle } from "../../helpers/ObtenerDetalleTicket";
 import { getEstados } from "../../controllers/TicketsController";
 const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
+  const navigate = useNavigate();
   const userDataString = JSON.parse(localStorage.getItem("userData"));
   const [fullscreen, setFullscreen] = useState(true);
   const [detalleTicket, setDetalleTicket] = useState([]);
   const [estados, setEstados] = useState([]);
   useEffect(() => {
-
     const est = async () => {
       const e = await getEstados();
       setEstados(e);
     };
     est();
-
   }, []);
   const handleCambiarEstado = async (e) => {
     e.preventDefault();
@@ -29,8 +32,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
       id: id_usuario,
       estado: e.target[1].value,
     };
-    console.log(cambiarEstado);
-    console.log(idTicket);
+
     const exito = await changeEstado(idTicket, cambiarEstado);
     if (exito == 200) {
       toast.success("Se cambio el estado con exito");
@@ -263,20 +265,23 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
                     aria-label="Default select example"
                   >
                     {estados.map((estado, i) => (
-                <option key={i} value={estado}>
-                  {estado}
-                </option>
-              ))}
-                    
+                      <option key={i} value={estado}>
+                        {estado}
+                      </option>
+                    ))}
                   </Form.Select>
                 </>
               )}
             </div>
-            {userDataString.tipo == 3 && (
-              <Button type="submit" className="mt-3 bg-azulOscuro border-0 rounded-5">
-                Cambiar Estado
-              </Button>
-            )}
+            {userDataString.tipo == 3 ||
+              (detalleTicket?.estado === "RESUELTO" && (
+                <Button
+                  type="submit"
+                  className="mt-3 bg-azulOscuro border-0 rounded-5"
+                >
+                  Cambiar Estado
+                </Button>
+              ))}
           </div>
         </Form>
         <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
