@@ -5,7 +5,12 @@ import CardsNotiTickets from "../../components/cards/CardsNotiTickets";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ModalAsignarTarea from "../../components/modales/ModalAsignarTarea";
-import { changeEstado, EnviarNotificaciones, getDetalleTicket, getEstados } from "../../controllers/TicketsController";
+import {
+  changeEstado,
+  EnviarNotificaciones,
+  getDetalleTicket,
+  getEstados,
+} from "../../controllers/TicketsController";
 import { crearTarea, getPrioridades } from "../../controllers/TareasController";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -14,107 +19,102 @@ import "react-toastify/dist/ReactToastify.css";
 const AdminDetalleTicket = () => {
   const { id } = useParams();
   const [modalShow, setModalShow] = useState(false);
-  const [ticket, setTicket] = useState({})
-  const[estados, setEstados] = useState([])
-  const[prioridades, setPrioridades] = useState([])
+  const [ticket, setTicket] = useState({});
+  const [estados, setEstados] = useState([]);
+  const [prioridades, setPrioridades] = useState([]);
   const [taskFormData, setTaskFormData] = useState({
     nombre: "",
     prioridad: "",
-    info: ""
+    info: "",
   });
   const [notificationFormData, setNotificationFormData] = useState({
     information: "",
     file: null,
-    notifyClient: false
+    notifyClient: false,
   });
-  
+
   useEffect(() => {
-    const data = async() =>{
-      const tas = await getDetalleTicket(id)
-      setTicket(tas)
-    }
-    data()
-    const est = async()  =>{
-      const e = await getEstados()
-      setEstados(e)
-    }
-    est()
-    const priori = async() =>{
-      const pr = await getPrioridades()
-      setPrioridades(pr)
-    }
-    priori()
-  }, [])
- 
-  const handleChangeTarea = e =>{
-    setTaskFormData({...taskFormData, [e.target.name]: e.target.value})
-  } 
+    const data = async () => {
+      const tas = await getDetalleTicket(id);
+      setTicket(tas);
+    };
+    data();
+    const est = async () => {
+      const e = await getEstados();
+      setEstados(e);
+    };
+    est();
+    const priori = async () => {
+      const pr = await getPrioridades();
+      setPrioridades(pr);
+    };
+    priori();
+  }, []);
 
-  const handleValidation = async(encargado) => {
+  const handleChangeTarea = (e) => {
+    setTaskFormData({ ...taskFormData, [e.target.name]: e.target.value });
+  };
+
+  const handleValidation = async (encargado) => {
     for (let index = 0; index < Object.keys(taskFormData).length; index++) {
-      if(Object.values(taskFormData)[index].length == 0){
-        toast.error("Hay Campos Vacios")
-        return  
-      }     
-    } 
+      if (Object.values(taskFormData)[index].length == 0) {
+        toast.error("Hay Campos Vacios");
+        return;
+      }
+    }
 
-    const nuevaTarea = {...taskFormData, id_encargado: parseInt(encargado), id_ticket: parseInt(id)}
-    const exito = await crearTarea(nuevaTarea)
-    if(exito == 200){
-      toast.success("Tarea Creada con Exito")
+    const nuevaTarea = {
+      ...taskFormData,
+      id_encargado: parseInt(encargado),
+      id_ticket: parseInt(id),
+    };
+    const exito = await crearTarea(nuevaTarea);
+    if (exito == 200) {
+      toast.success("Tarea Creada con Exito");
       setTimeout(() => {
-        window.location.reload()
+        window.location.reload();
       }, 1500);
     } else {
-      toast.error("Error al crear tarea, intentelo mas tarde")
+      toast.error("Error al crear tarea, intentelo mas tarde");
     }
   };
 
   const navigate = useNavigate();
-  const handleCambiarEstado = async(e) => {
-    e.preventDefault()
-    const {id_usuario} = JSON.parse(localStorage.getItem("userData"))
+  const handleCambiarEstado = async (e) => {
+    e.preventDefault();
+    const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
     const cambiarEstado = {
       id: id_usuario,
-      estado: e.target[1].value
-    }    
-    const exito = await changeEstado(id, cambiarEstado)
-    if(exito == 200){
-      toast.success("Se cambio el estado con exito")
+      estado: e.target[1].value,
+    };
+    const exito = await changeEstado(id, cambiarEstado);
+    if (exito == 200) {
+      toast.success("Se cambio el estado con exito");
       setTimeout(() => {
-       if(cambiarEstado.estado === "RESUELTO"){
-        navigate("/dashboard/admin/tickets")
-       } else {
-        window.location.reload()
-       }
+        if (cambiarEstado.estado === "RESUELTO") {
+          navigate("/dashboard/admin/tickets");
+        } else {
+          window.location.reload();
+        }
       }, 1500);
     } else {
-      toast.error("Error al cambiar estado, intentelo mas tarde")
+      toast.error("Error al cambiar estado, intentelo mas tarde");
     }
-  }
+  };
 
-  const handleChangeNoti = e =>{
-    console.log(e.target.value)
-      setNotificationFormData({...notificationFormData, [e.target.name]: e.target.value})
-  }
-
-  const handleSendNotification = async(e) => {
+  const handleSendNotification = async (e) => {
     e.preventDefault();
 
-    const {id_usuario} = JSON.parse(localStorage.getItem("userData"))
+    const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
 
-    const form = new FormData()
+    const form = new FormData();
 
-    form.append("dato", e.target.elements.Informacion.value)
-    form.append("id_remitente", parseInt(id_usuario))
-    form.append("notificar_cliente", e.target.elements.notifyClient.checked)
-    form.append("archivo", e.target.elements.file.files[0])
+    form.append("dato", e.target.elements.Informacion.value);
+    form.append("id_remitente", parseInt(id_usuario));
+    form.append("notificar_cliente", e.target.elements.notifyClient.checked);
+    form.append("archivo", e.target.elements.file.files[0]);
 
-    const camposRequeridos = [
-      "dato",
-      "id_remitente",
-      "notificar_cliente",
-    ];
+    const camposRequeridos = ["dato", "id_remitente", "notificar_cliente"];
     const faltanCampos = [];
     camposRequeridos.forEach((campo) => {
       if (!form.has(campo) || form.get(campo) === "") {
@@ -126,11 +126,11 @@ const AdminDetalleTicket = () => {
 
       return;
     }
-    const exito = await EnviarNotificaciones(id, form)
-    if(exito == 200){
-      toast.success("Notificacion Enviada con Exito")
+    const exito = await EnviarNotificaciones(id, form);
+    if (exito == 200) {
+      toast.success("Notificacion Enviada con Exito");
       setTimeout(() => {
-        window.location.reload()
+        window.location.reload();
       }, 1500);
     } else {
       toast.error(`Error al Enviar una Notificacion, intente mas tarde`);
@@ -138,14 +138,13 @@ const AdminDetalleTicket = () => {
   };
 
   //Verificar que un objeto esta vacio y meter el loader
-  if(Object.keys(ticket).length == 0){
+  if (Object.keys(ticket).length == 0) {
     return (
       <div className="d-flex justify-content-center align-items-center my-5">
         <div className="loader"></div>
       </div>
-    )
+    );
   }
-
 
   return (
     <main className="container my-3">
@@ -167,7 +166,7 @@ const AdminDetalleTicket = () => {
           <Form.Control
             type="text"
             id="Apellido"
-            aria-describedby="apellidoHelpBlock"  
+            aria-describedby="apellidoHelpBlock"
             className="rounded-5 border-dark"
             disabled
             value={ticket.clienteApellido}
@@ -279,18 +278,23 @@ const AdminDetalleTicket = () => {
               aria-label="Default select example"
             >
               {estados.map((estado, i) => (
-                  <option key={i} value={estado}>{estado}</option>
+                <option key={i} value={estado}>
+                  {estado}
+                </option>
               ))}
             </Form.Select>
           </div>
-          <Button type="submit" className="mt-3 bg-azulOscuro border-0 rounded-5">
+          <Button
+            type="submit"
+            className="mt-3 bg-azulOscuro border-0 rounded-5"
+          >
             Cambiar Estado
           </Button>
         </div>
       </Form>
       <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
-      {ticket.tareas.map((tarea, i) =>(
-        <CardsTareasTickets tarea={tarea} key={i}/>
+      {ticket.tareas.map((tarea, i) => (
+        <CardsTareasTickets tarea={tarea} key={i} />
       ))}
       <h3>Crear Tarea</h3>
       <Form onSubmit={(e) => e.preventDefault()} className="mb-3">
@@ -316,9 +320,13 @@ const AdminDetalleTicket = () => {
               value={taskFormData.prioridad}
               onChange={handleChangeTarea}
             >
-              <option disabled value={""}>--Seleccione Una Opcion--</option>
+              <option disabled value={""}>
+                --Seleccione Una Opcion--
+              </option>
               {prioridades.map((prioridad, i) => (
-                  <option key={i} value={prioridad}>{prioridad}</option>
+                <option key={i} value={prioridad}>
+                  {prioridad}
+                </option>
               ))}
             </Form.Select>
           </div>
@@ -336,21 +344,24 @@ const AdminDetalleTicket = () => {
             onChange={handleChangeTarea}
           />
         </div>
-        <Button onClick={() => setModalShow(true)} className="mt-3 bg-azulOscuro border-0 rounded-5 boton-25">
-            Crear y Asignar Tarea
+        <Button
+          onClick={() => setModalShow(true)}
+          className="mt-3 bg-azulOscuro border-0 rounded-5 boton-25"
+        >
+          Crear y Asignar Tarea
         </Button>
         <ModalAsignarTarea
-             show={modalShow}
-             onHide={() => setModalShow(false)}
-             tarea={handleValidation}
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          tarea={handleValidation}
         />
       </Form>
       <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>
-      <div className="overflow-y-scroll my-3" style={{height: "300px"}}>
-        {ticket.notificaciones.map( (noti, i)  => (
+      <div className="overflow-y-scroll my-3" style={{ height: "300px" }}>
+        {ticket.notificaciones.map((noti, i) => (
           <CardsNotiTickets key={i} notificacion={noti} />
         ))}
-      </div>      
+      </div>
       <h3>Enviar Notificacion</h3>
       <Form onSubmit={handleSendNotification}>
         <div className="d-md-flex justify-content-between gap-4">
@@ -371,34 +382,34 @@ const AdminDetalleTicket = () => {
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Envio de Archivo (Opcional)</Form.Label>
               <Form.Control
-               type="file"
-               name="file"
-              //  value={notificationFormData.file}
-              //  onChange={handleChangeNoti}
-               />
+                type="file"
+                name="file"
+                //  value={notificationFormData.file}
+                //  onChange={handleChangeNoti}
+              />
             </Form.Group>
-            <Form.Check 
-            id="notifyClient"
-            name="notifyClient"
-            // value={notificationFormData.notifyClient}
-            // onChange={handleChangeNoti} 
-            inline label="Notificar al Cliente" />
+            <Form.Check
+              id="notifyClient"
+              name="notifyClient"
+              // value={notificationFormData.notifyClient}
+              // onChange={handleChangeNoti}
+              inline
+              label="Notificar al Cliente"
+            />
             <div>
-              <Button type="submit" className="mt-3 bg-azulOscuro border-0 rounded-5 w-100">
+              <Button
+                type="submit"
+                className="mt-3 bg-azulOscuro border-0 rounded-5 w-100"
+              >
                 Enviar Notificacion
               </Button>
             </div>
           </div>
         </div>
       </Form>
-      <ToastContainer
-              autoClose={2000}
-              transition:Slide              
-              theme="colored"
-            />
+      <ToastContainer autoClose={2000} transition:Slide theme="colored" />
     </main>
   );
- 
 };
 
 export default AdminDetalleTicket;

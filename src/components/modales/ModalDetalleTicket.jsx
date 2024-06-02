@@ -4,11 +4,13 @@ import Button from "react-bootstrap/Button";
 import CardsTareasTickets from "../cards/CardsTareasTickets";
 import CardsNotiTickets from "../cards/CardsNotiTickets";
 import { useState, useEffect, useRef } from "react";
+import { toast } from "react-toastify";
+import { EnviarNotificaciones } from "../../controllers/TicketsController";
 
 const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   const userDataString = JSON.parse(localStorage.getItem("userData"));
   const [fullscreen, setFullscreen] = useState(true);
-  const [detalleTicket, setDetalleTicket] = useState({});
+  const [detalleTicket, setDetalleTicket] = useState([]);
 
   const isFirstRender = useRef(true);
   //aca se toma el ticekt
@@ -43,6 +45,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
 
     obtenerDetalle();
   }, [idTicket]);
+  console.log(detalleTicket);
   const archivoExiste =
     detalleTicket?.archivos?.length > 0
       ? detalleTicket.archivos[0]
@@ -53,11 +56,46 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
 
   if (Object.keys(detalleTicket).length == 0) {
     return (
-      <div className="d-flex justify-content-center align-items-center my-5">
-        <div className="loader"></div>
+      <div className="d-flex justify-content-center align-items-center ">
+        <div></div>
       </div>
     );
   }
+
+  const handleSendNotification = async (e) => {
+    e.preventDefault();
+
+    const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
+
+    const form = new FormData();
+
+    form.append("dato", e.target.elements.Informacion.value);
+    form.append("id_remitente", parseInt(id_usuario));
+    form.append("notificar_cliente", e.target.elements.notifyClient.checked);
+    form.append("archivo", e.target.elements.file.files[0]);
+
+    const camposRequeridos = ["dato", "id_remitente", "notificar_cliente"];
+    const faltanCampos = [];
+    camposRequeridos.forEach((campo) => {
+      if (!form.has(campo) || form.get(campo) === "") {
+        faltanCampos.push(campo);
+      }
+    });
+    if (faltanCampos.length > 0) {
+      toast.error("Faltan Campos que Llenar");
+
+      return;
+    }
+    const exito = await EnviarNotificaciones(idTicket, form);
+    if (exito == 200) {
+      toast.success("Notificacion Enviada con Exito");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } else {
+      toast.error(`Error al Enviar una Notificacion, intente mas tarde`);
+    }
+  };
   return (
     <Modal
       show={show}
@@ -226,11 +264,16 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
           </div>
         </Form>
         <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
-        <CardsTareasTickets />
+        {detalleTicket?.tareas.map((tarea) => (
+          <CardsTareasTickets key={tarea} tarea={tarea} />
+        ))}
+
         <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>
-        <CardsNotiTickets />
+        {detalleTicket?.notificaciones.map((noti, i) => (
+          <CardsNotiTickets key={i} notificacion={noti} />
+        ))}
         <h3>Enviar Notificacion</h3>
-        <Form>
+        <Form onSubmit={handleSendNotification}>
           <div className="d-md-flex justify-content-between gap-4">
             <div className="mb-2 buscar">
               <Form.Label htmlFor="Informacion">Informacion:</Form.Label>
@@ -240,19 +283,34 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
                 aria-describedby="InformacionHelpBlock"
                 className="rounded-5 border-dark"
                 style={{ height: "100px" }}
+                name="information"
+                // value={notificationFormData.information}
+                // onChange={handleChangeNoti}
               />
             </div>
             <div className="buscar">
               <Form.Group controlId="formFile" className="mb-3">
                 <Form.Label>Envio de Archivo (Opcional)</Form.Label>
-                <Form.Control type="file" />
+                <Form.Control
+                  type="file"
+                  name="file"
+                  //  value={notificationFormData.file}
+                  //  onChange={handleChangeNoti}
+                />
               </Form.Group>
-              {userDataString.tipo != 1 && (
-                <Form.Check inline label="Notificar al Cliente" />
-              )}
-
+              <Form.Check
+                id="notifyClient"
+                name="notifyClient"
+                // value={notificationFormData.notifyClient}
+                // onChange={handleChangeNoti}
+                inline
+                label="Notificar al Cliente"
+              />
               <div>
-                <Button className="mt-3 bg-azulOscuro border-0 rounded-5 w-100">
+                <Button
+                  type="submit"
+                  className="mt-3 bg-azulOscuro border-0 rounded-5 w-100"
+                >
                   Enviar Notificacion
                 </Button>
               </div>
