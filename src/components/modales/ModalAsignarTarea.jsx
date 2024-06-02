@@ -3,14 +3,14 @@ import Modal from 'react-bootstrap/Modal';
 import Table from "react-bootstrap/Table"
 import Form from "react-bootstrap/Form"
 import { useEffect, useState } from 'react';
-import { getTecnicosByEmail } from '../../controllers/UsuariosControllers';
+import { getTecnicosforTicket } from '../../controllers/UsuariosControllers';
 
 const ModalAsignarTarea = (props) => {
   const[tecnicos, setTecnicos] = useState([])
 
   useEffect(() => {
     const data = async() =>{
-      const tec = await getTecnicosByEmail()
+      const tec = await getTecnicosforTicket()
       setTecnicos(tec)
     }
     data()
