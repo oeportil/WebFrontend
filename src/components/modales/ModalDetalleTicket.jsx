@@ -5,13 +5,46 @@ import CardsTareasTickets from "../cards/CardsTareasTickets";
 import CardsNotiTickets from "../cards/CardsNotiTickets";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import { EnviarNotificaciones } from "../../controllers/TicketsController";
+import { EnviarNotificaciones, changeEstado } from "../../controllers/TicketsController";
 import { obtenerDetalle } from "../../helpers/ObtenerDetalleTicket";
+import { getEstados } from "../../controllers/TicketsController";
 const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   const userDataString = JSON.parse(localStorage.getItem("userData"));
   const [fullscreen, setFullscreen] = useState(true);
   const [detalleTicket, setDetalleTicket] = useState([]);
+  const [estados, setEstados] = useState([]);
+  useEffect(() => {
 
+    const est = async () => {
+      const e = await getEstados();
+      setEstados(e);
+    };
+    est();
+
+  }, []);
+  const handleCambiarEstado = async (e) => {
+    e.preventDefault();
+    const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
+    const cambiarEstado = {
+      id: id_usuario,
+      estado: e.target[1].value,
+    };
+    console.log(cambiarEstado);
+    console.log(idTicket);
+    const exito = await changeEstado(idTicket, cambiarEstado);
+    if (exito == 200) {
+      toast.success("Se cambio el estado con exito");
+      setTimeout(() => {
+        if (cambiarEstado.estado === "RESUELTO") {
+          navigate("/dashboard/admin/tickets");
+        } else {
+          window.location.reload();
+        }
+      }, 1500);
+    } else {
+      toast.error("Error al cambiar estado, intentelo mas tarde");
+    }
+  };
   const isFirstRender = useRef(true);
   //aca se toma el ticekt
   useEffect(() => {
@@ -206,7 +239,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
             />
           </div>
         </div>
-        <Form>
+        <Form onSubmit={handleCambiarEstado}>
           <div className="grid_modal_3 align-items-center">
             <div className="mb-3">
               <Form.Label htmlFor="Encargado">Encargado</Form.Label>
@@ -229,16 +262,18 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
                     className="rounded-5 border-dark"
                     aria-label="Default select example"
                   >
-                    <option>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {estados.map((estado, i) => (
+                <option key={i} value={estado}>
+                  {estado}
+                </option>
+              ))}
+                    
                   </Form.Select>
                 </>
               )}
             </div>
             {userDataString.tipo == 3 && (
-              <Button className="mt-3 bg-azulOscuro border-0 rounded-5">
+              <Button type="submit" className="mt-3 bg-azulOscuro border-0 rounded-5">
                 Cambiar Estado
               </Button>
             )}
