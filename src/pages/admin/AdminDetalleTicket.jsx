@@ -271,6 +271,8 @@ const AdminDetalleTicket = () => {
               value={ticket.encargado}
             />
           </div>
+         {ticket.estado !== "RESUELTO" &&
+          <>
           <div className="mb-3">
             <Form.Label htmlFor="estadoChange">Cambiar Estado</Form.Label>
             <Form.Select
@@ -290,6 +292,8 @@ const AdminDetalleTicket = () => {
           >
             Cambiar Estado
           </Button>
+          </>
+          }
         </div>
       </Form>
       <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
