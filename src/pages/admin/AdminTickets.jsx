@@ -17,6 +17,7 @@ const AdminTickets = () => {
   const [idTicketTarea, setIdTicketTarea] = useState(-1);
   const [nombreTarea, setNombreTarea] = useState("");
   const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
+  const[idTarea, setIdTarea] = useState({})
 
   //funciones
   const cambiarIdTickTarea = (val) => {
@@ -33,7 +34,7 @@ const AdminTickets = () => {
       }
     }
   };
-
+  
   //useeffects
   useEffect(() => {
     const datatick = async () => {
@@ -66,6 +67,7 @@ const AdminTickets = () => {
     };
     datatar();
   }, [tipoTarea, nombreTarea, idTicketTarea]);
+
   return (
     <main className="container my-3">
       <h4 className="text-center text-uppercase txt_azul fw-normal">
@@ -98,7 +100,7 @@ const AdminTickets = () => {
           </thead>
           <tbody>
             {tickets.map((ticket) => (
-              <tr>
+              <tr key={ticket.id}>
                 <td>{ticket.id}</td>
                 <td>{ticket.servicio}</td>
                 <td>{ticket.cliente}</td>
@@ -168,8 +170,8 @@ const AdminTickets = () => {
             </tr>
           </thead>
           <tbody>
-            {tareas.map((tarea) => (
-              <tr>
+            {tareas.map((tarea, i) => (
+              <tr key={i}>
                 <td>{tarea.id_ticket}</td>
                 <td>{tarea.servicio}</td>
                 <td>{tarea.cliente}</td>
@@ -178,12 +180,12 @@ const AdminTickets = () => {
                   <button className="border-0 bg-none txt_azul">
                     Ver Ticket
                   </button>
-                  <button
+                  {!tarea.completada ? <button
                     className="border-0 bg-none txt_azul"
-                    onClick={() => setModalShow(true)}
+                    onClick={() => EditarTarea(tarea)}
                   >
                     Editar Tarea
-                  </button>
+                  </button> : ""}
                 </td>
               </tr>
             ))}
@@ -196,9 +198,14 @@ const AdminTickets = () => {
           </h5>
         </div>
       )}
-      <ModalEditarTarea show={modalShow} onHide={() => setModalShow(false)} />
+      <ModalEditarTarea show={modalShow} onHide={() => setModalShow(false)} tarea={idTarea}/>
     </main>
   );
+  function EditarTarea(tarea){
+    setModalShow(true)
+    setIdTarea(tarea)
+  }
+
 };
 
 export default AdminTickets;

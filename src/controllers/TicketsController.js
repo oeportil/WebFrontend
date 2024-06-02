@@ -83,3 +83,35 @@ export async function EnviarNotificaciones(id_ticket, form) {
     })
     return noti.status
 }
+
+export async function EditTarea(id_ticket, tarea){
+    const edtarea = await fetch(`${import.meta.env.VITE_API_URL}/Misc/EditarTarea/${id_ticket}`,{
+        method: 'PATCH',
+        body: JSON.stringify(tarea),
+        headers: {
+            'Content-Type': 'application/json',
+          }
+    })
+   return edtarea.status
+}
+
+export async function RechazarTarea(id_ticket){
+    const fta = await fetch(`${import.meta.env.VITE_API_URL}/Misc/RechazarTarea/${id_ticket}`,{
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+          }
+    })
+   return fta.status
+}
+
+export async function AsignarTarea(id_tarea, idUser){
+    const asignTask = await fetch(`${import.meta.env.VITE_API_URL}/Misc/AsignarTarea/${id_tarea}`,{
+        method: 'PATCH',
+        body: JSON.stringify(idUser),
+        headers: {
+            'Content-Type': 'application/json',
+          }
+    })
+   return asignTask.status
+}

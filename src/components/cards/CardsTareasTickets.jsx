@@ -1,6 +1,13 @@
+import { useState } from 'react';
 import Card from 'react-bootstrap/Card';
+import ModalAsignarTarea from '../modales/ModalAsignarTarea';
+import { AsignarTarea } from '../../controllers/TicketsController';
+
+import {  toast } from "react-toastify";
+
 
 const CardsTareasTickets = ({tarea}) => {
+  const [modalShow, setModalShow] = useState(false);
   return (
     <Card className='my-3' style={{ width: '100%' }}>
     <Card.Body>
@@ -23,10 +30,32 @@ const CardsTareasTickets = ({tarea}) => {
         </div> 
     </Card.Body>
     <Card.Footer>
-        Asignada a: {tarea.encargado} 
+        {tarea.encargado != null ? `Asignada a: ${tarea.encargado} `: 
+          <button onClick={() =>setModalShow(true)} className="border-0 bg-none txt_azul">
+              Asignar
+          </button>} 
     </Card.Footer>
+    <ModalAsignarTarea
+             show={modalShow}
+             onHide={() => setModalShow(false)}
+             tarea={handleAsignar}
+        />
+
   </Card>
   )
+
+  async function handleAsignar(user){
+
+    const exito = await AsignarTarea(tarea.id_tarea, {id_encargado: user})
+    if(exito == 200){
+      toast.success("Tarea Asignada con Exito")
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500);
+    } else {
+      toast.error("Error al asignar tarea, intentelo mas tarde")
+    }
+  }
 }
 
 export default CardsTareasTickets
