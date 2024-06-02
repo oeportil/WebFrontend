@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
@@ -7,6 +7,8 @@ import {
   getTicketsComoSoporte,
 } from "../../controllers/SoporteTicketsController";
 import ModalEditarTarea from "../../components/modales/ModalEditarTarea";
+import { obtenerDetalle } from "../../helpers/ObtenerDetalleTicket";
+import ModalDetalleTicket from "../../components/modales/ModalDetalleTicket";
 
 const AdminTickets = () => {
   const [modalShow, setModalShow] = useState(false);
@@ -16,8 +18,11 @@ const AdminTickets = () => {
   const [tipoTarea, setTipoTarea] = useState(1);
   const [idTicketTarea, setIdTicketTarea] = useState(-1);
   const [nombreTarea, setNombreTarea] = useState("");
-  const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
-  const[idTarea, setIdTarea] = useState({})
+  const { id_usuario, tipo } = JSON.parse(localStorage.getItem("userData"));
+  const [idTarea, setIdTarea] = useState({});
+  const [detalleTicket, setDetalleTicket] = useState([]);
+  const [modalDetalle, setModalDetalle] = useState(false);
+  const [ticketID, setTicketID] = useState("");
 
   //funciones
   const cambiarIdTickTarea = (val) => {
@@ -34,7 +39,7 @@ const AdminTickets = () => {
       }
     }
   };
-  
+
   //useeffects
   useEffect(() => {
     const datatick = async () => {
@@ -67,6 +72,23 @@ const AdminTickets = () => {
     };
     datatar();
   }, [tipoTarea, nombreTarea, idTicketTarea]);
+
+  const isFirstRender = useRef(true);
+  //aca se toma el ticekt
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const fetchDetalle = async () => {
+      setDetalleTicket({});
+      const detalle = await obtenerDetalle({ ticketID });
+      setDetalleTicket(detalle);
+    };
+
+    fetchDetalle();
+  }, [ticketID]);
+  console.log(detalleTicket);
 
   return (
     <main className="container my-3">
@@ -159,38 +181,56 @@ const AdminTickets = () => {
         </Form.Select>
       </div>
       {tareas.length != 0 ? (
-        <Table responsive="md" className="my-3">
-          <thead>
-            <tr>
-              <th className="bg-azulMedio text-white">ID de Ticket</th>
-              <th className="bg-azulMedio text-white">Servicio</th>
-              <th className="bg-azulMedio text-white">Cliente</th>
-              <th className="bg-azulMedio text-white">Nombre Tarea</th>
-              <th className="bg-azulMedio"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {tareas.map((tarea, i) => (
-              <tr key={i}>
-                <td>{tarea.id_ticket}</td>
-                <td>{tarea.servicio}</td>
-                <td>{tarea.cliente}</td>
-                <td>{tarea.nombre}</td>
-                <td>
-                  <button className="border-0 bg-none txt_azul">
-                    Ver Ticket
-                  </button>
-                  {!tarea.completada ? <button
-                    className="border-0 bg-none txt_azul"
-                    onClick={() => EditarTarea(tarea)}
-                  >
-                    Editar Tarea
-                  </button> : ""}
-                </td>
+        <>
+          <Table responsive="md" className="my-3">
+            <thead>
+              <tr>
+                <th className="bg-azulMedio text-white">ID de Ticket</th>
+                <th className="bg-azulMedio text-white">Servicio</th>
+                <th className="bg-azulMedio text-white">Cliente</th>
+                <th className="bg-azulMedio text-white">Nombre Tarea</th>
+                <th className="bg-azulMedio"></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {tareas.map((tarea, i) => (
+                <tr key={i}>
+                  <td>{tarea.id_ticket}</td>
+                  <td>{tarea.servicio}</td>
+                  <td>{tarea.cliente}</td>
+                  <td>{tarea.nombre}</td>
+                  <td>
+                    <button
+                      className="border-0 bg-none txt_azul"
+                      onClick={() => {
+                        setModalDetalle(true);
+                        setTicketID(tarea.id_ticket);
+                      }}
+                    >
+                      Ver Ticket
+                    </button>
+                    {!tarea.completada ? (
+                      <button
+                        className="border-0 bg-none txt_azul"
+                        onClick={() => EditarTarea(tarea)}
+                      >
+                        Editar Tarea
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <ModalDetalleTicket
+            show={modalDetalle}
+            idTicket={ticketID}
+            tipo={tipo}
+            onHide={() => setModalDetalle(false)}
+          />
+        </>
       ) : (
         <div>
           <h5 className="text-center txt_azul fw-normal">
@@ -198,14 +238,17 @@ const AdminTickets = () => {
           </h5>
         </div>
       )}
-      <ModalEditarTarea show={modalShow} onHide={() => setModalShow(false)} tarea={idTarea}/>
+      <ModalEditarTarea
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        tarea={idTarea}
+      />
     </main>
   );
-  function EditarTarea(tarea){
-    setModalShow(true)
-    setIdTarea(tarea)
+  function EditarTarea(tarea) {
+    setModalShow(true);
+    setIdTarea(tarea);
   }
-
 };
 
 export default AdminTickets;

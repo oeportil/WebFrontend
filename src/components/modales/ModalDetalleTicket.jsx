@@ -6,7 +6,7 @@ import CardsNotiTickets from "../cards/CardsNotiTickets";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { EnviarNotificaciones } from "../../controllers/TicketsController";
-
+import { obtenerDetalle } from "../../helpers/ObtenerDetalleTicket";
 const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   const userDataString = JSON.parse(localStorage.getItem("userData"));
   const [fullscreen, setFullscreen] = useState(true);
@@ -19,33 +19,15 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
       isFirstRender.current = false; // Marca como no primer render después de la primera ejecución
       return; // Salir del useEffect en el primer render
     }
-
-    let url = "";
-    if (userDataString.tipo === 1) {
-      url = `${
-        import.meta.env.VITE_API_URL
-      }/Ticket/ObtenerDetalleCliente/${idTicket}`;
-    } else {
-      url = `${import.meta.env.VITE_API_URL}/Ticket/ObtenerDetalle/${idTicket}`;
-    }
-
-    const obtenerDetalle = async () => {
+    const fetchDetalle = async () => {
       setDetalleTicket({});
-      if (idTicket) {
-        const LlamadoDetalle = await fetch(url);
-        if (LlamadoDetalle.status !== 404) {
-          const detalle = await LlamadoDetalle.json();
-          await setDetalleTicket(detalle);
-        } else {
-          console.warn("Esperando Elección de ticket");
-        }
-      }
-      return;
+      const detalle = await obtenerDetalle({ idTicket });
+      setDetalleTicket(detalle);
     };
 
-    obtenerDetalle();
+    fetchDetalle();
   }, [idTicket]);
-  console.log(detalleTicket);
+
   const archivoExiste =
     detalleTicket?.archivos?.length > 0
       ? detalleTicket.archivos[0]
@@ -54,14 +36,13 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
     ? "No hay un encargado"
     : detalleTicket?.encargado;
 
-  if (Object.keys(detalleTicket).length == 0) {
+  if (detalleTicket && Object.keys(detalleTicket).length === 0) {
     return (
       <div className="d-flex justify-content-center align-items-center ">
         <div></div>
       </div>
     );
   }
-
   const handleSendNotification = async (e) => {
     e.preventDefault();
 
@@ -264,8 +245,8 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
           </div>
         </Form>
         <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
-        {detalleTicket?.tareas.map((tarea) => (
-          <CardsTareasTickets key={tarea} tarea={tarea} />
+        {detalleTicket?.tareas.map((tarea, i) => (
+          <CardsTareasTickets key={i} tarea={tarea} />
         ))}
 
         <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>

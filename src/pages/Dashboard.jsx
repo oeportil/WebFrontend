@@ -9,7 +9,7 @@ const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [ticketID, setTicketID] = useState("");
   //aca se llama a la API
-  const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
+  const { id_usuario, tipo } = JSON.parse(localStorage.getItem("userData"));
   useEffect(() => {
     const APIRequest = async () => {
       //ahorita es estatico para probar
@@ -114,6 +114,7 @@ const Dashboard = () => {
                 <ModalDetalleTicket
                   show={modalDetalle}
                   idTicket={ticketID}
+                  tipoUser={tipo}
                   onHide={() => setModalDetalle(false)}
                 />
               </div>
