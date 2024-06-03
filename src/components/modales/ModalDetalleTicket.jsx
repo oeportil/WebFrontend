@@ -18,7 +18,9 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   const [fullscreen, setFullscreen] = useState(true);
   const [detalleTicket, setDetalleTicket] = useState([]);
   const [estados, setEstados] = useState([]);
-  useEffect(() => {
+
+  //condición de los 2 ternarios de cambio estado
+  const puedeCambio = useEffect(() => {
     const est = async () => {
       const e = await getEstados();
       setEstados(e);
@@ -256,32 +258,35 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
               />
             </div>
             <div className="mb-3">
-              {userDataString.tipo == 3 && (
-                <>
-                  {" "}
-                  <Form.Label htmlFor="estadoChange">Cambiar Estado</Form.Label>
-                  <Form.Select
-                    className="rounded-5 border-dark"
-                    aria-label="Default select example"
-                  >
-                    {estados.map((estado, i) => (
-                      <option key={i} value={estado}>
-                        {estado}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </>
-              )}
+              {userDataString.tipo != 1 &&
+                detalleTicket?.estado !== "RESUELTO" && (
+                  <>
+                    {" "}
+                    <Form.Label htmlFor="estadoChange">
+                      Cambiar Estado
+                    </Form.Label>
+                    <Form.Select
+                      className="rounded-5 border-dark"
+                      aria-label="Default select example"
+                    >
+                      {estados.map((estado, i) => (
+                        <option key={i} value={estado}>
+                          {estado}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </>
+                )}
             </div>
-            {userDataString.tipo == 3 ||
-              (detalleTicket?.estado === "RESUELTO" && (
+            {userDataString.tipo != 1 &&
+              detalleTicket?.estado !== "RESUELTO" && (
                 <Button
                   type="submit"
                   className="mt-3 bg-azulOscuro border-0 rounded-5"
                 >
                   Cambiar Estado
                 </Button>
-              ))}
+              )}
           </div>
         </Form>
         <Form.Label htmlFor="Tareas">Tareas:</Form.Label>

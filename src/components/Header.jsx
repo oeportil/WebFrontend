@@ -41,7 +41,7 @@ const Header = () => {
               {tipo != 1 && (
                 <Nav.Item className="text-white">
                   <Link
-                    to={"/dashboard/admin/tickets"}
+                    to={"/dashboard/employee/tickets"}
                     className="text-decoration-none"
                   >
                     Tickets

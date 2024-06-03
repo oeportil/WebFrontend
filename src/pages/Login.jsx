@@ -5,12 +5,18 @@ import { Image } from "react-bootstrap";
 import Logo from "../images/Potologo.png";
 import Button from "react-bootstrap/Button";
 import "../styles/login.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      navigate("/dashboard/user");
+    }
+  }, [navigate]);
   const [user, setUser] = useState({
     correo: "",
     contrasena: "",
