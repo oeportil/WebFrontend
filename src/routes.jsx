@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin/tickets/:id",
+        path: "employee/tickets/:id",
         element: (
           <RequireAdmin>
             <AdminDetalleTicket />

@@ -130,7 +130,7 @@ const AdminTickets = () => {
                 <td>
                   <Link
                     className="txt_azul"
-                    to={`/dashboard/admin/tickets/${ticket.id}`}
+                    to={`/dashboard/employee/tickets/${ticket.id}`}
                   >
                     Editar Ticket
                   </Link>
