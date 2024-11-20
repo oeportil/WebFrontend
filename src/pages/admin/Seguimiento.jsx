@@ -31,7 +31,7 @@ const Seguimiento = () => {
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_API_URL
-    }/Ticket/ObtenerPorFiltro/${selectedFilter}`;
+    }/tickets/ObtenerPorFiltro/${selectedFilter}`;
     try {
       const FilteredTicektsCall = async () => {
         const result = await fetch(url);

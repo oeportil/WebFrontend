@@ -34,7 +34,7 @@ const Login = () => {
     };
 
     // Envío de los datos del usuario al servidor
-    const url = `${import.meta.env.VITE_API_URL}/Usuarios/Login`;
+    const url = `${import.meta.env.VITE_API_URL}/usuarios/Login`;
     fetch(url, requestOptions)
       .then((response) => response.json())
       .then((data) => {

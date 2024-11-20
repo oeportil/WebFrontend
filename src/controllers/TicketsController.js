@@ -1,6 +1,6 @@
 
 export async function getTicketsDasAdmin(){
-    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/Ticket/ObtenerDash`)
+    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/tickets/ObtenerDash`)
     if(tickets.status !== 404){
         return tickets.json()
     } else {
@@ -9,7 +9,7 @@ export async function getTicketsDasAdmin(){
 }
 
 export async function getTicketsSinAsignar() {
-    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/Ticket/ObtenerSinAsignar`)
+    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/tickets/ObtenerSinAsignar`)
     if(tickets.status !== 404){
         return tickets.json()
     } else {
@@ -18,7 +18,7 @@ export async function getTicketsSinAsignar() {
 }
 
 export async function asginarTicketBD(id, tecnico){
-    const asignar = await fetch(`${import.meta.env.VITE_API_URL}/Ticket/AsignarSoporte/${id}`, {
+    const asignar = await fetch(`${import.meta.env.VITE_API_URL}/tickets/AsignarSoporte/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(tecnico),
         headers: {
@@ -29,7 +29,7 @@ export async function asginarTicketBD(id, tecnico){
 }
 
 export async function getTicketPorEstado(objeto){
-    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/Ticket/ObtenerPorEstado`, {
+    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/tickets/ObtenerPorEstado`, {
         method: 'POST',
         body: JSON.stringify(objeto),
         headers: {
@@ -46,13 +46,13 @@ export async function getTicketPorEstado(objeto){
 }
 
 export async function getEstadisticas(){
-    const estadisticas = await fetch(`${import.meta.env.VITE_API_URL}/Misc/ObtenerTiposTicket`)
+    const estadisticas = await fetch(`${import.meta.env.VITE_API_URL}/misc/ObtenerTiposTicket`)
     const resultado = await estadisticas.json()
     return resultado
 }
 
 export async function getDetalleTicket(id){
-    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/Ticket/ObtenerDetalle/${id}`)
+    const tickets = await fetch(`${import.meta.env.VITE_API_URL}/tickets/ObtenerDetalle/${id}`)
     if(tickets.status !== 404){
         return tickets.json()
     } else {
@@ -61,12 +61,12 @@ export async function getDetalleTicket(id){
 }
 
 export async function getEstados() {
-    const estados = await fetch(`${import.meta.env.VITE_API_URL}/Misc/ObtenerEstados`)
+    const estados = await fetch(`${import.meta.env.VITE_API_URL}/misc/ObtenerEstados`)
     return estados.json()
 }
 
 export async function changeEstado(id, state) {
-    const estado = await fetch(`${import.meta.env.VITE_API_URL}/Ticket/EditarTicket/${id}`, {
+    const estado = await fetch(`${import.meta.env.VITE_API_URL}/tickets/EditarTicket/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(state),
         headers: {
@@ -77,7 +77,7 @@ export async function changeEstado(id, state) {
 }
 
 export async function EnviarNotificaciones(id_ticket, form) {
-    const noti = await fetch(`${import.meta.env.VITE_API_URL}/Misc/Comentar/${id_ticket}`,{
+    const noti = await fetch(`${import.meta.env.VITE_API_URL}/misc/Comentar/${id_ticket}`,{
         method: 'POST',
         body: form
     })
@@ -85,7 +85,7 @@ export async function EnviarNotificaciones(id_ticket, form) {
 }
 
 export async function EditTarea(id_ticket, tarea){
-    const edtarea = await fetch(`${import.meta.env.VITE_API_URL}/Misc/EditarTarea/${id_ticket}`,{
+    const edtarea = await fetch(`${import.meta.env.VITE_API_URL}/misc/EditarTarea/${id_ticket}`,{
         method: 'PATCH',
         body: JSON.stringify(tarea),
         headers: {
@@ -96,7 +96,7 @@ export async function EditTarea(id_ticket, tarea){
 }
 
 export async function RechazarTarea(id_ticket){
-    const fta = await fetch(`${import.meta.env.VITE_API_URL}/Misc/RechazarTarea/${id_ticket}`,{
+    const fta = await fetch(`${import.meta.env.VITE_API_URL}/misc/RechazarTarea/${id_ticket}`,{
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export async function RechazarTarea(id_ticket){
 }
 
 export async function AsignarTarea(id_tarea, idUser){
-    const asignTask = await fetch(`${import.meta.env.VITE_API_URL}/Misc/AsignarTarea/${id_tarea}`,{
+    const asignTask = await fetch(`${import.meta.env.VITE_API_URL}/misc/AsignarTarea/${id_tarea}`,{
         method: 'PATCH',
         body: JSON.stringify(idUser),
         headers: {

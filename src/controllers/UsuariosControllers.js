@@ -1,7 +1,7 @@
 
 
 export async function getEmpleados(){
-    const emp = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerDash`)
+    const emp = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/ObtenerDash`)
     if(emp.status !== 404){
         return emp.json()
     } else {
@@ -9,7 +9,7 @@ export async function getEmpleados(){
     }
 }  
 export async function getTecnicos(tec, email =""){
-    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerUsus/${tec}?busqueda=${email}`)
+    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/ObtenerUsus/${tec}?busqueda=${email}`)
     if(tecnic.status !== 404){
         return tecnic.json()
     } else {
@@ -18,7 +18,7 @@ export async function getTecnicos(tec, email =""){
    }
 
 export async function getTecnicosforTicket(email = ""){
-    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerTecnicos?busqueda=${email}`)
+    const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/ObtenerTecnicos?busqueda=${email}`)
       if(tecnic.status !== 404){
         return tecnic.json()
     } else {
@@ -27,12 +27,12 @@ export async function getTecnicosforTicket(email = ""){
 }
 
    export async function getRoles() {
-    const rol = await fetch(`${import.meta.env.VITE_API_URL}/Misc/ObtenerRoles`)
+    const rol = await fetch(`${import.meta.env.VITE_API_URL}/misc/ObtenerRoles`)
     return rol.json()
    }
 
    export async function createUsuario(user) {
-        const usuario = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/CrearUsuario`, {
+        const usuario = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/CrearUsuario`, {
             method: 'POST',
             body: JSON.stringify(user),
             headers: {
@@ -48,7 +48,7 @@ export async function getTecnicosforTicket(email = ""){
 
    export async function updateUsuario(user, id) {
     console.log(user)
-    const usuario = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/EditarUsuario/${id}`, {
+    const usuario = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/EditarUsuario/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(user),
         headers: {
@@ -64,7 +64,7 @@ export async function getTecnicosforTicket(email = ""){
    }
 
    export async function getTecnicosByEmail(email=""){
-        const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/Usuarios/ObtenerUsus/2?busqueda=${email}`)
+        const tecnic = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/ObtenerUsus/2?busqueda=${email}`)
         if(tecnic.status != 404){
             const resultado = await tecnic.json()
             return resultado

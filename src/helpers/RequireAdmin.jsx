@@ -6,7 +6,7 @@ const RequireAdmin = ({ children }) => {
 
   if (locale != null) {
     const user = JSON.parse(locale);
-    const usuario = { id_rol: user.tipo };
+    const usuario = { id_rol: user.rol.tipoRol.idTipoRol };
 
     // Verifica si el usuario es administrador
     if (usuario.id_rol == 1 && location.pathname.includes("/dashboard/admin")) {

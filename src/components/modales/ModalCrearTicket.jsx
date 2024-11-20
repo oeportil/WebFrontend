@@ -123,7 +123,7 @@ const ModalCrearTicket = (props) => {
             <p>Nombre:</p>
             <p style={stylesP}>{userDataString.nombre}</p>
             <p>Correo:</p>
-            <p style={stylesP}>{userDataString.correo}</p>
+            <p style={stylesP}>{userDataString.email}</p>
             <p>Teléfono</p>
             <p style={stylesP}>{userDataString.telefono}</p>
             <Form.Control

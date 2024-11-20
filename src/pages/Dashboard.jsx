@@ -9,13 +9,13 @@ const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [ticketID, setTicketID] = useState("");
   //aca se llama a la API
-  const { id_usuario, tipo } = JSON.parse(localStorage.getItem("userData"));
+  const { idUsuario, tipo } = JSON.parse(localStorage.getItem("userData"));
   useEffect(() => {
     const APIRequest = async () => {
       //ahorita es estatico para probar
       const url = `${
         import.meta.env.VITE_API_URL
-      }/Ticket/ObtenerPorCliente/${id_usuario}`;
+      }/tickets/ObtenerPorCliente/${idUsuario}`;
       const APIAnswer = await fetch(url);
       if (APIAnswer.status !== 404) {
         const data = await APIAnswer.json();
