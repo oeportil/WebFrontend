@@ -11,6 +11,7 @@ const ModalCrearTicket = (props) => {
   };
   //aca estoy extrayendo los datos del localeStorage
   const userDataString = JSON.parse(localStorage.getItem("userData"));
+
   const handleSubmit = (e) => {
     e.preventDefault();
     //aca se crea el formData
@@ -21,7 +22,7 @@ const ModalCrearTicket = (props) => {
     formData.append("servicio", e.target.elements.servicio.value);
     formData.append("archivo", e.target.elements.archivo.files[0]);
     formData.append("prioridad", e.target.elements.prioridad.value);
-    formData.append("id_cliente", userDataString.id_usuario);
+    formData.append("id_cliente", userDataString.idUsuario);
 
     const camposRequeridos = [
       "descripcion",
@@ -41,12 +42,15 @@ const ModalCrearTicket = (props) => {
       return;
     }
 
-    const url = `${import.meta.env.VITE_API_URL}/Ticket/CrearTicket`;
+    const url = `${import.meta.env.VITE_API_URL}/tickets/CrearTicket`;
     fetch(url, {
       method: "POST",
       body: formData,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        response.json();
+      })
       .then(() => {
         toast.success("Ticket creado con éxito");
         setTimeout(() => {
