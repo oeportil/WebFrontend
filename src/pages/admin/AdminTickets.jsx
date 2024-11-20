@@ -18,7 +18,7 @@ const AdminTickets = () => {
   const [tipoTarea, setTipoTarea] = useState(1);
   const [idTicketTarea, setIdTicketTarea] = useState(-1);
   const [nombreTarea, setNombreTarea] = useState("");
-  const { id_usuario, tipo } = JSON.parse(localStorage.getItem("userData"));
+  const { idUsuario, tipo } = JSON.parse(localStorage.getItem("userData"));
   const [idTarea, setIdTarea] = useState({});
   const [detalleTicket, setDetalleTicket] = useState([]);
   const [modalDetalle, setModalDetalle] = useState(false);
@@ -43,19 +43,19 @@ const AdminTickets = () => {
   //useeffects
   useEffect(() => {
     const datatick = async () => {
-      const tick = await getTicketsComoSoporte(id_usuario, 1);
+      const tick = await getTicketsComoSoporte(idUsuario, 1);
       setTickets(tick);
     };
     datatick();
     const datatar = async () => {
-      const tar = await getTareasComoSoporte(id_usuario, 1);
+      const tar = await getTareasComoSoporte(idUsuario, 1);
       setTareas(tar);
     };
     datatar();
   }, []);
   useEffect(() => {
     const datatick = async () => {
-      const tick = await getTicketsComoSoporte(id_usuario, tipoTicket);
+      const tick = await getTicketsComoSoporte(idUsuario, tipoTicket);
       setTickets(tick);
     };
     datatick();
@@ -63,7 +63,7 @@ const AdminTickets = () => {
   useEffect(() => {
     const datatar = async () => {
       const tar = await getTareasComoSoporte(
-        id_usuario,
+        idUsuario,
         tipoTarea,
         idTicketTarea,
         nombreTarea

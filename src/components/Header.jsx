@@ -11,7 +11,7 @@ const Header = () => {
   let nombre = "";
   if (localStorage.getItem("userData") != null) {
     const usuario = JSON.parse(localStorage.getItem("userData"));
-    tipo = usuario.tipo;
+    tipo = usuario.rol.tipoRol.idTipoRol;
     nombre = usuario.nombre;
   }
 
