@@ -31,7 +31,7 @@ const TablaInfoTickets = ({ tickets }) => {
                 className="border-0 bg-none txt_azul"
                 onClick={() => {
                   setModalDetalle(true);
-                  setTicketID(ticket.id);
+                  setTicketID(ticket.Id);
                 }}
               >
                 Ver detalle

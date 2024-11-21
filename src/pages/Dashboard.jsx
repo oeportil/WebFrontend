@@ -102,7 +102,7 @@ const Dashboard = () => {
                         key={ticket.Id}
                         onClick={() => {
                           setModalDetalle(true);
-                          setTicketID(ticket.id);
+                          setTicketID(ticket.Id);
                         }}
                       >
                         <td>{ticket.Id}</td>

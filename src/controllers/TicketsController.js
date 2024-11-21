@@ -80,12 +80,14 @@ export async function getEstados() {
   return estados.json();
 }
 
-export async function changeEstado(id, state) {
+export async function changeEstado(id, state, ejecutor) {
+  const data = JSON.stringify({ estado: state, idEjecutor: +ejecutor });
+  console.log(data);
   const estado = await fetch(
     `${import.meta.env.VITE_API_URL}/tickets/EditarTicket/${id}`,
     {
       method: "PATCH",
-      body: JSON.stringify(state),
+      body: data,
       headers: {
         "Content-Type": "application/json",
       },

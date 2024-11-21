@@ -18,7 +18,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   const [fullscreen, setFullscreen] = useState(true);
   const [detalleTicket, setDetalleTicket] = useState([]);
   const [estados, setEstados] = useState([]);
-
+  const tipo = JSON.parse(localStorage.getItem("userData")).rol.idRol;
   //condición de los 2 ternarios de cambio estado
   const puedeCambio = useEffect(() => {
     const est = async () => {
@@ -29,13 +29,10 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   }, []);
   const handleCambiarEstado = async (e) => {
     e.preventDefault();
-    const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
-    const cambiarEstado = {
-      id: id_usuario,
-      estado: e.target[1].value,
-    };
-
-    const exito = await changeEstado(idTicket, cambiarEstado);
+    const { idUsuario } = JSON.parse(localStorage.getItem("userData"));
+    const cambiarEstado = e.target[1].value;
+    console.log(idUsuario);
+    const exito = await changeEstado(idTicket, cambiarEstado, idUsuario);
     if (exito == 200) {
       toast.success("Se cambio el estado con exito");
       setTimeout(() => {
@@ -83,15 +80,16 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   const handleSendNotification = async (e) => {
     e.preventDefault();
 
-    const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
+    const { idUsuario } = JSON.parse(localStorage.getItem("userData"));
 
     const form = new FormData();
 
     form.append("dato", e.target.elements.Informacion.value);
-    form.append("id_remitente", parseInt(id_usuario));
+    form.append("id_remitente", parseInt(idUsuario));
     form.append("notificar_cliente", e.target.elements.notifyClient.checked);
     form.append("archivo", e.target.elements.file.files[0]);
 
+    // Verificar que los campos requeridos estén presentes
     const camposRequeridos = ["dato", "id_remitente", "notificar_cliente"];
     const faltanCampos = [];
     camposRequeridos.forEach((campo) => {
@@ -101,17 +99,18 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
     });
     if (faltanCampos.length > 0) {
       toast.error("Faltan Campos que Llenar");
-
       return;
     }
+
+    // Enviar la notificación
     const exito = await EnviarNotificaciones(idTicket, form);
-    if (exito == 200) {
-      toast.success("Notificacion Enviada con Exito");
+    if (exito === 200) {
+      toast.success("Notificación Enviada con Exito");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
     } else {
-      toast.error(`Error al Enviar una Notificacion, intente mas tarde`);
+      toast.error(`Error al Enviar una Notificación, intente más tarde`);
     }
   };
 
@@ -138,7 +137,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
               id="Nombre"
               aria-describedby="nombreHelpBlock"
               className="rounded-5 border-dark"
-              defaultValue={detalleTicket?.clienteNombre}
+              defaultValue={detalleTicket?.clientenombre}
             />
           </div>
           <div className="mb-3">
@@ -149,7 +148,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
               aria-describedby="apellidoHelpBlock"
               className="rounded-5 border-dark"
               disabled={true}
-              defaultValue={detalleTicket?.clienteApellido}
+              defaultValue={detalleTicket?.clienteapellido}
             />
           </div>
           <div className="mb-3">
@@ -160,7 +159,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
               aria-describedby="telefonoHelpBlock"
               className="rounded-5 border-dark"
               disabled={true}
-              defaultValue={detalleTicket?.clienteTelefono}
+              defaultValue={detalleTicket?.clientetelefono}
             />
           </div>
         </div>
@@ -259,46 +258,44 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
               />
             </div>
             <div className="mb-3">
-              {userDataString.tipo != 1 &&
-                detalleTicket?.estado !== "RESUELTO" && (
-                  <>
-                    {" "}
-                    <Form.Label htmlFor="estadoChange">
-                      Cambiar Estado
-                    </Form.Label>
-                    <Form.Select
-                      className="rounded-5 border-dark"
-                      aria-label="Default select example"
-                    >
-                      {estados.map((estado, i) => (
-                        <option key={i} value={estado}>
-                          {estado}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </>
-                )}
-            </div>
-            {userDataString.tipo != 1 &&
-              detalleTicket?.estado !== "RESUELTO" && (
-                <Button
-                  type="submit"
-                  className="mt-3 bg-azulOscuro border-0 rounded-5"
-                >
-                  Cambiar Estado
-                </Button>
+              {tipo != 1 && detalleTicket?.estado !== "RESUELTO" && (
+                <>
+                  {" "}
+                  <Form.Label htmlFor="estadoChange">Cambiar Estado</Form.Label>
+                  <Form.Select
+                    className="rounded-5 border-dark"
+                    aria-label="Default select example"
+                  >
+                    {estados.map((estado, i) => (
+                      <option key={i} value={estado}>
+                        {estado}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </>
               )}
+            </div>
+            {tipo != 1 && detalleTicket?.estado !== "RESUELTO" && (
+              <Button
+                type="submit"
+                className="mt-3 bg-azulOscuro border-0 rounded-5"
+              >
+                Cambiar Estado
+              </Button>
+            )}
           </div>
         </Form>
         <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
-        {detalleTicket?.tareas.map((tarea, i) => (
-          <CardsTareasTickets key={i} tarea={tarea} />
-        ))}
+        {detalleTicket?.tareas &&
+          detalleTicket?.tareas.map((tarea, i) => (
+            <CardsTareasTickets key={i} tarea={tarea} />
+          ))}
 
         <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>
-        {detalleTicket?.notificaciones.map((noti, i) => (
-          <CardsNotiTickets key={i} notificacion={noti} />
-        ))}
+        {detalleTicket?.notificaciones &&
+          detalleTicket?.notificaciones.map((noti, i) => (
+            <CardsNotiTickets key={i} notificacion={noti} />
+          ))}
         <h3>Enviar Notificacion</h3>
         <Form onSubmit={handleSendNotification}>
           <div className="d-md-flex justify-content-between gap-4">
