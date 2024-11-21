@@ -57,41 +57,13 @@ const AdminDetalleTicket = () => {
     setTaskFormData({ ...taskFormData, [e.target.name]: e.target.value });
   };
 
-  const handleValidation = async (encargado) => {
-    for (let field of Object.values(taskFormData)) {
-      if (!field) {
-        toast.error("Hay campos vacíos");
-        return;
-      }
-    }
-
-    const nuevaTarea = {
-      ...taskFormData,
-      id_encargado: parseInt(encargado),
-      id_ticket: parseInt(Id),
-    };
-
-    const exito = await crearTarea(nuevaTarea);
-    if (exito === 200) {
-      toast.success("Tarea creada con éxito");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    } else {
-      toast.error("Error al crear tarea, intenta más tarde");
-    }
-  };
-
   const navigate = useNavigate();
   const handleCambiarEstado = async (e) => {
     e.preventDefault();
-    const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
-    const cambiarEstado = {
-      id: id_usuario,
-      estado: e.target[1].value,
-    };
-    const exito = await changeEstado(Id, cambiarEstado);
-    if (exito === 200) {
+    const { idUsuario } = JSON.parse(localStorage.getItem("userData"));
+    const cambiarEstado = e.target[1].value;
+    const exito = await changeEstado(Id, cambiarEstado, idUsuario);
+    if (exito == 200) {
       toast.success("Estado cambiado con éxito");
       setTimeout(() => {
         if (cambiarEstado.estado === "RESUELTO") {
@@ -268,11 +240,16 @@ const AdminDetalleTicket = () => {
             />
           </div>
           <div className="mb-3">
-            <Form.Label htmlFor="Estado">Cambiar Estado</Form.Label>
-            <Form.Select id="Estado">
-              <option value="Pendiente">Pendiente</option>
-              <option value="En Proceso">En Proceso</option>
-              <option value="Resuelto">Resuelto</option>
+            <Form.Label htmlFor="estadoChange">Cambiar Estado</Form.Label>
+            <Form.Select
+              className="rounded-5 border-dark"
+              aria-label="Default select example"
+            >
+              {estados.map((estado, i) => (
+                <option key={i} value={estado}>
+                  {estado}
+                </option>
+              ))}
             </Form.Select>
           </div>
         </div>
@@ -293,8 +270,8 @@ const AdminDetalleTicket = () => {
 
       <ModalAsignarTarea
         show={modalShow}
+        id={Id}
         onHide={() => setModalShow(false)}
-        onSubmit={handleValidation}
       />
       <ToastContainer />
     </main>
