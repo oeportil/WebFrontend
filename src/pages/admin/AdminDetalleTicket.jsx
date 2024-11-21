@@ -17,7 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AdminDetalleTicket = () => {
-  const { id } = useParams();
+  const { id: Id } = useParams();
   const [modalShow, setModalShow] = useState(false);
   const [ticket, setTicket] = useState({});
   const [estados, setEstados] = useState([]);
@@ -34,31 +34,33 @@ const AdminDetalleTicket = () => {
   });
 
   useEffect(() => {
-    const data = async () => {
-      const tas = await getDetalleTicket(id);
-      setTicket(tas);
+    const fetchTicketData = async () => {
+      const ticketData = await getDetalleTicket(Id);
+      setTicket(ticketData);
     };
-    data();
-    const est = async () => {
-      const e = await getEstados();
-      setEstados(e);
+    fetchTicketData();
+
+    const fetchEstados = async () => {
+      const estadosData = await getEstados();
+      setEstados(estadosData);
     };
-    est();
-    const priori = async () => {
-      const pr = await getPrioridades();
-      setPrioridades(pr);
+    fetchEstados();
+
+    const fetchPrioridades = async () => {
+      const prioridadesData = await getPrioridades();
+      setPrioridades(prioridadesData);
     };
-    priori();
-  }, []);
+    fetchPrioridades();
+  }, [Id]);
 
   const handleChangeTarea = (e) => {
     setTaskFormData({ ...taskFormData, [e.target.name]: e.target.value });
   };
 
   const handleValidation = async (encargado) => {
-    for (let index = 0; index < Object.keys(taskFormData).length; index++) {
-      if (Object.values(taskFormData)[index].length == 0) {
-        toast.error("Hay Campos Vacios");
+    for (let field of Object.values(taskFormData)) {
+      if (!field) {
+        toast.error("Hay campos vacíos");
         return;
       }
     }
@@ -66,16 +68,17 @@ const AdminDetalleTicket = () => {
     const nuevaTarea = {
       ...taskFormData,
       id_encargado: parseInt(encargado),
-      id_ticket: parseInt(id),
+      id_ticket: parseInt(Id),
     };
+
     const exito = await crearTarea(nuevaTarea);
-    if (exito == 200) {
-      toast.success("Tarea Creada con Exito");
+    if (exito === 200) {
+      toast.success("Tarea creada con éxito");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
     } else {
-      toast.error("Error al crear tarea, intentelo mas tarde");
+      toast.error("Error al crear tarea, intenta más tarde");
     }
   };
 
@@ -87,9 +90,9 @@ const AdminDetalleTicket = () => {
       id: id_usuario,
       estado: e.target[1].value,
     };
-    const exito = await changeEstado(id, cambiarEstado);
-    if (exito == 200) {
-      toast.success("Se cambio el estado con exito");
+    const exito = await changeEstado(Id, cambiarEstado);
+    if (exito === 200) {
+      toast.success("Estado cambiado con éxito");
       setTimeout(() => {
         if (cambiarEstado.estado === "RESUELTO") {
           navigate("/dashboard/admin/tickets");
@@ -98,7 +101,7 @@ const AdminDetalleTicket = () => {
         }
       }, 1500);
     } else {
-      toast.error("Error al cambiar estado, intentelo mas tarde");
+      toast.error("Error al cambiar estado, intenta más tarde");
     }
   };
 
@@ -108,7 +111,6 @@ const AdminDetalleTicket = () => {
     const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
 
     const form = new FormData();
-
     form.append("dato", e.target.elements.Informacion.value);
     form.append("id_remitente", parseInt(id_usuario));
     form.append("notificar_cliente", e.target.elements.notifyClient.checked);
@@ -121,24 +123,25 @@ const AdminDetalleTicket = () => {
         faltanCampos.push(campo);
       }
     });
-    if (faltanCampos.length > 0) {
-      toast.error("Faltan Campos que Llenar");
 
+    if (faltanCampos.length > 0) {
+      toast.error("Faltan campos que llenar");
       return;
     }
-    const exito = await EnviarNotificaciones(id, form);
-    if (exito == 200) {
-      toast.success("Notificacion Enviada con Exito");
+
+    const exito = await EnviarNotificaciones(Id, form);
+    if (exito === 200) {
+      toast.success("Notificación enviada con éxito");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
     } else {
-      toast.error(`Error al Enviar una Notificacion, intente mas tarde`);
+      toast.error("Error al enviar notificación, intenta más tarde");
     }
   };
 
-  //Verificar que un objeto esta vacio y meter el loader
-  if (Object.keys(ticket).length == 0) {
+  // Verificar si un objeto está vacío y mostrar un loader
+  if (Object.keys(ticket).length === 0) {
     return (
       <div className="d-flex justify-content-center align-items-center my-5">
         <div className="loader"></div>
@@ -148,14 +151,14 @@ const AdminDetalleTicket = () => {
 
   return (
     <main className="container my-3">
-      <h2 className="text-center txt_azul">TICKET Nº {id}</h2>
+      <h2 className="text-center txt_azul">TICKET Nº {Id}</h2>
       <div className="grid_modal_3">
         <div className="mb-3">
           <Form.Label htmlFor="Nombre">Nombre</Form.Label>
           <Form.Control
             type="text"
             id="Nombre"
-            value={ticket.clienteNombre}
+            value={ticket.clientenombre}
             aria-describedby="nombreHelpBlock"
             className="rounded-5 border-dark"
             disabled
@@ -169,25 +172,14 @@ const AdminDetalleTicket = () => {
             aria-describedby="apellidoHelpBlock"
             className="rounded-5 border-dark"
             disabled
-            value={ticket.clienteApellido}
-          />
-        </div>
-        <div className="mb-3">
-          <Form.Label htmlFor="Telefono">Telefono</Form.Label>
-          <Form.Control
-            type="tel"
-            id="Telefono"
-            aria-describedby="telefonoHelpBlock"
-            className="rounded-5 border-dark"
-            disabled
-            value={ticket.clienteTelefono}
+            value={ticket.clienteapellido}
           />
         </div>
       </div>
       <div className="grid_modal_4">
         <div className="mb-3">
           <Form.Label htmlFor="NombreApp">
-            Nombre de Aplicacion o Servicio
+            Nombre de Aplicación o Servicio
           </Form.Label>
           <Form.Control
             type="text"
@@ -221,7 +213,7 @@ const AdminDetalleTicket = () => {
           />
         </div>
         <div className="mb-3">
-          <Form.Label htmlFor="Fecha">Fecha de Creacion</Form.Label>
+          <Form.Label htmlFor="Fecha">Fecha de Creación</Form.Label>
           <Form.Control
             type="text"
             id="Fecha"
@@ -234,7 +226,7 @@ const AdminDetalleTicket = () => {
       </div>
       <div className="grid_modal_2">
         <div className="mb-3">
-          <Form.Label htmlFor="descript">Descripcion del Problema</Form.Label>
+          <Form.Label htmlFor="descript">Descripción del Problema</Form.Label>
           <Form.Control
             as="textarea"
             id="descript"
@@ -254,7 +246,11 @@ const AdminDetalleTicket = () => {
             className="rounded-5 border-dark"
             style={{ height: "100px" }}
             disabled
-            value={ticket.archivos[0]}
+            value={
+              ticket.archivos && ticket.archivos.length > 0
+                ? ticket.archivos[0]
+                : "No hay archivos disponibles"
+            }
           />
         </div>
       </div>
@@ -271,147 +267,36 @@ const AdminDetalleTicket = () => {
               value={ticket.encargado}
             />
           </div>
-         {ticket.estado !== "RESUELTO" &&
-          <>
           <div className="mb-3">
-            <Form.Label htmlFor="estadoChange">Cambiar Estado</Form.Label>
-            <Form.Select
-              className="rounded-5 border-dark"
-              aria-label="Default select example"
-            >
-              {estados.map((estado, i) => (
-                <option key={i} value={estado}>
-                  {estado}
-                </option>
-              ))}
-            </Form.Select>
-          </div>
-          <Button
-            type="submit"
-            className="mt-3 bg-azulOscuro border-0 rounded-5"
-          >
-            Cambiar Estado
-          </Button>
-          </>
-          }
-        </div>
-      </Form>
-      <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
-      {ticket.tareas.map((tarea, i) => (
-        <CardsTareasTickets tarea={tarea} key={i} />
-      ))}
-      <h3>Crear Tarea</h3>
-      <Form onSubmit={(e) => e.preventDefault()} className="mb-3">
-        <div className="grid_modal_2">
-          <div className="mb-3">
-            <Form.Label htmlFor="tareNombre">Nombre</Form.Label>
-            <Form.Control
-              type="text"
-              id="tareNombre"
-              name="nombre"
-              aria-describedby="tareNombreHelpBlock"
-              className="rounded-5 border-dark"
-              value={taskFormData.nombre}
-              onChange={handleChangeTarea}
-            />
-          </div>
-          <div className="mb-3">
-            <Form.Label htmlFor="PrioridadTarea">Prioridad</Form.Label>
-            <Form.Select
-              className="rounded-5 border-dark"
-              aria-label="Default select example"
-              name="prioridad"
-              value={taskFormData.prioridad}
-              onChange={handleChangeTarea}
-            >
-              <option disabled value={""}>
-                --Seleccione Una Opcion--
-              </option>
-              {prioridades.map((prioridad, i) => (
-                <option key={i} value={prioridad}>
-                  {prioridad}
-                </option>
-              ))}
+            <Form.Label htmlFor="Estado">Cambiar Estado</Form.Label>
+            <Form.Select id="Estado">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En Proceso">En Proceso</option>
+              <option value="Resuelto">Resuelto</option>
             </Form.Select>
           </div>
         </div>
-        <div className="">
-          <Form.Label htmlFor="DescripcionTarea">Descripcion</Form.Label>
-          <Form.Control
-            as="textarea"
-            id="DescripcionTarea"
-            aria-describedby="DescripcionTareaHelpBlock"
-            className="rounded-5 border-dark"
-            style={{ height: "100px" }}
-            name="info"
-            value={taskFormData.info}
-            onChange={handleChangeTarea}
-          />
-        </div>
-        <Button
-          onClick={() => setModalShow(true)}
-          className="mt-3 bg-azulOscuro border-0 rounded-5 boton-25"
-        >
-          Crear y Asignar Tarea
+        <Button variant="primary" type="submit" className="rounded-5">
+          Cambiar Estado
         </Button>
-        <ModalAsignarTarea
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          tarea={handleValidation}
-        />
       </Form>
-      <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>
-      <div className="overflow-y-scroll my-3" style={{ height: "300px" }}>
-        {ticket.notificaciones.map((noti, i) => (
-          <CardsNotiTickets key={i} notificacion={noti} />
-        ))}
+
+      <div className="d-flex justify-content-end my-3">
+        <Button
+          variant="success"
+          className="rounded-5"
+          onClick={() => setModalShow(true)}
+        >
+          Asignar Tarea
+        </Button>
       </div>
-      <h3>Enviar Notificacion</h3>
-      <Form onSubmit={handleSendNotification}>
-        <div className="d-md-flex justify-content-between gap-4">
-          <div className="mb-2 buscar">
-            <Form.Label htmlFor="Informacion">Informacion:</Form.Label>
-            <Form.Control
-              as="textarea"
-              id="Informacion"
-              aria-describedby="InformacionHelpBlock"
-              className="rounded-5 border-dark"
-              style={{ height: "100px" }}
-              name="information"
-              // value={notificationFormData.information}
-              // onChange={handleChangeNoti}
-            />
-          </div>
-          <div className="buscar">
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Envio de Archivo (Opcional)</Form.Label>
-              <Form.Control
-                type="file"
-                name="file"
-                //  value={notificationFormData.file}
-                //  onChange={handleChangeNoti}
-              />
-            </Form.Group>
-            <Form.Check
-              id="notifyClient"
-              name="notifyClient"
-              // value={notificationFormData.notifyClient}
-              // onChange={handleChangeNoti}
-              inline
-              label="Notificar al Cliente"
-            />
-            <div>
-              <Button
-                type="submit"
-                className="mt-3 bg-azulOscuro border-0 rounded-5 w-100"
-              >
-                Enviar Notificacion
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Form>
-      <ToastContainer autoClose={2000} transition:Slide theme="colored" />
+
+      <ModalAsignarTarea
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onSubmit={handleValidation}
+      />
+      <ToastContainer />
     </main>
   );
 };

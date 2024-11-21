@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import ModalAsignarTicket from "../../components/modales/ModalAsignarTicket";
 import { getTicketsSinAsignar } from "../../controllers/TicketsController";
+import { formatDate } from "../../helpers/FechaFormater";
 
 const AsignacionTickets = () => {
   const [modalShow, setModalShow] = useState(false);
@@ -15,7 +16,7 @@ const AsignacionTickets = () => {
     };
     tickets();
   }, []);
-  console.log(tsAsginar);
+
   return (
     <main className="container my-4">
       <h4>Asignacion de Tickets</h4>
@@ -38,7 +39,7 @@ const AsignacionTickets = () => {
                   <td>{ticket.Servicio}</td>
                   <td>{ticket.Cliente}</td>
                   <td>{ticket.Correo}</td>
-                  <td>{ticket.Fecha}</td>
+                  <td>{formatDate(ticket.FechaDate)}</td>
                   <td>
                     <button
                       className="border-0 bg-none d-flex gap-2 txt_azul"
