@@ -285,11 +285,11 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
             )}
           </div>
         </Form>
-        <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
+        {/* <Form.Label htmlFor="Tareas">Tareas:</Form.Label>
         {detalleTicket?.tareas &&
           detalleTicket?.tareas.map((tarea, i) => (
             <CardsTareasTickets key={i} tarea={tarea} />
-          ))}
+          ))} */}
 
         <Form.Label htmlFor="Notificaciones">Notificaciones:</Form.Label>
         {detalleTicket?.notificaciones &&

@@ -127,12 +127,16 @@ const AdminTickets = () => {
                 <td>{ticket.Cliente}</td>
                 <td>{ticket.Correo}</td>
                 <td>
-                  <Link
+                  <p
                     className="txt_azul"
-                    to={`/dashboard/employee/tickets/${ticket.Id}`}
+                    style={{cursor: "pointer"}}
+                    onClick={() => {
+                      setModalDetalle(true);
+                      setTicketID(ticket.Id);
+                    }}
                   >
                     Editar Ticket
-                  </Link>
+                  </p>
                 </td>
               </tr>
             ))}
@@ -145,109 +149,14 @@ const AdminTickets = () => {
           </h5>
         </div>
       )}
-
-      <h4 className="text-center text-uppercase txt_azul fw-normal">
-        Tareas Asignadas
-      </h4>
-      <div className="d-md-flex gap-2">
-        <Form.Control
-          type="number"
-          id="idtickettarea"
-          aria-describedby="buscarIDHelpBlock"
-          onChange={(e) => cambiarIdTickTarea(e.target.value)}
-          placeholder="Buscar por Id"
-          className="buscar mt-2"
-        />
-        <Form.Control
-          type="text"
-          id="nombreTarea"
-          aria-describedby="buscarIDHelpBlock"
-          onChange={(e) => setNombreTarea(e.target.value)}
-          value={nombreTarea}
-          placeholder="Buscar por Nombre"
-          className="buscar mt-2"
-        />
-        <Form.Select
-          className="select mt-2"
-          aria-label="Default select example"
-          onChange={(e) => setTipoTarea(e.target.value)}
-          value={tipoTarea}
-          defaultValue={1}
-        >
-          <option value="1">Sin Resolver</option>
-          <option value="2">Resueltos</option>
-          <option value="3">Todos</option>
-        </Form.Select>
-      </div>
-      {tareas.length != 0 ? (
-        <>
-          <Table responsive="md" className="my-3">
-            <thead>
-              <tr>
-                <th className="bg-azulMedio text-white">ID de Ticket</th>
-                <th className="bg-azulMedio text-white">Servicio</th>
-                <th className="bg-azulMedio text-white">Cliente</th>
-                <th className="bg-azulMedio text-white">Nombre Tarea</th>
-                <th className="bg-azulMedio"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {tareas.map((tarea, i) => (
-                <tr key={i}>
-                  <td>{tarea.id_ticket}</td>
-                  <td>{tarea.servicio}</td>
-                  <td>{tarea.cliente}</td>
-                  <td>{tarea.nombre}</td>
-                  <td>
-                    <button
-                      className="border-0 bg-none txt_azul"
-                      onClick={() => {
-                        setModalDetalle(true);
-                        setTicketID(tarea.id_ticket);
-                      }}
-                    >
-                      Ver Ticket
-                    </button>
-                    {!tarea.completada ? (
-                      <button
-                        className="border-0 bg-none txt_azul"
-                        onClick={() => EditarTarea(tarea)}
-                      >
-                        Editar Tarea
-                      </button>
-                    ) : (
-                      ""
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <ModalDetalleTicket
-            show={modalDetalle}
-            idTicket={ticketID}
-            tipo={tipo}
-            onHide={() => setModalDetalle(false)}
-          />
-        </>
-      ) : (
-        <div>
-          <h5 className="text-center txt_azul fw-normal">
-            No Hay Tareas Asignadas
-          </h5>
-        </div>
-      )}
-      <ModalEditarTarea
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        tarea={idTarea}
+      <ModalDetalleTicket
+        show={modalDetalle}
+        idTicket={ticketID}
+        tipoUser={tipo}
+        onHide={() => setModalDetalle(false)}
       />
     </main>
   );
-  function EditarTarea(tarea) {
-    setModalShow(true);
-    setIdTarea(tarea);
-  }
 };
 
 export default AdminTickets;

@@ -85,12 +85,12 @@ const AdminDetalleTicket = () => {
   const navigate = useNavigate();
   const handleCambiarEstado = async (e) => {
     e.preventDefault();
-    const { id_usuario } = JSON.parse(localStorage.getItem("userData"));
+    const { idUsuario } = JSON.parse(localStorage.getItem("userData"));
     const cambiarEstado = {
-      id: id_usuario,
+      id: idUsuario,
       estado: e.target[1].value,
     };
-    const exito = await changeEstado(Id, cambiarEstado);
+    const exito = await changeEstado(Id, e.target[1].value, idUsuario);
     if (exito === 200) {
       toast.success("Estado cambiado con éxito");
       setTimeout(() => {
@@ -281,16 +281,7 @@ const AdminDetalleTicket = () => {
         </Button>
       </Form>
 
-      <div className="d-flex justify-content-end my-3">
-        <Button
-          variant="success"
-          className="rounded-5"
-          onClick={() => setModalShow(true)}
-        >
-          Asignar Tarea
-        </Button>
-      </div>
-
+      
       <ModalAsignarTarea
         show={modalShow}
         onHide={() => setModalShow(false)}
