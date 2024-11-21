@@ -3,9 +3,9 @@ export const obtenerDetalle = async ({ idTicket, tipo }) => {
   if (tipo === 1) {
     url = `${
       import.meta.env.VITE_API_URL
-    }/Ticket/ObtenerDetalleCliente/${idTicket}`;
+    }/tickets/ObtenerDetalleCliente/${idTicket}`;
   } else {
-    url = `${import.meta.env.VITE_API_URL}/Ticket/ObtenerDetalle/${idTicket}`;
+    url = `${import.meta.env.VITE_API_URL}/tickets/ObtenerDetalle/${idTicket}`;
   }
 
   if (idTicket) {

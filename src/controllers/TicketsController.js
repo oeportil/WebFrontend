@@ -20,12 +20,12 @@ export async function getTicketsSinAsignar() {
   }
 }
 
-export async function asginarTicketBD(id, tecnico) {
+export async function asginarTicketBD(id, idSoporte) {
   const asignar = await fetch(
     `${import.meta.env.VITE_API_URL}/tickets/AsignarSoporte/${id}`,
     {
       method: "PATCH",
-      body: JSON.stringify(tecnico),
+      body: JSON.stringify({ idSoporte: +idSoporte }), // Convertir a JSON
       headers: {
         "Content-Type": "application/json",
       },

@@ -6,6 +6,7 @@ import "../../styles/seguimineto.css";
 import AdminDashboard from "../AdminDashboard";
 import { useEffect, useState } from "react";
 import ModalDetalleTicket from "../../components/modales/ModalDetalleTicket";
+import { formatDate } from "../../helpers/FechaFormater";
 
 const Seguimiento = () => {
   const [tickets, setTickets] = useState([]);
@@ -130,7 +131,7 @@ const Seguimiento = () => {
                       <td>{ticket.Cliente}</td>
                       <td>{ticket.Empleado}</td>
                       <td>{ticket.Correo}</td>
-                      <td>{ticket.FechaDate}</td>
+                      <td>{formatDate(ticket.FechaDate)}</td>
                       <td>{ticket.Estado}</td>
                       <button
                         className="border-0 bg-none d-flex gap-2 txt_azul"
