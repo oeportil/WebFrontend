@@ -36,6 +36,7 @@ const Seguimiento = () => {
       const FilteredTicektsCall = async () => {
         const result = await fetch(url);
         const filteredResult = await result.json();
+        console.log(filteredResult);
         setTickets(filteredResult);
       };
       FilteredTicektsCall();
@@ -123,14 +124,14 @@ const Seguimiento = () => {
                 </thead>
                 <tbody>
                   {tickets.map((ticket) => (
-                    <tr key={ticket.id}>
-                      <td>{ticket.id}</td>
-                      <td>{ticket.servicio}</td>
-                      <td>{ticket.cliente}</td>
-                      <td>{ticket.empleado}</td>
-                      <td>{ticket.correo}</td>
-                      <td>{ticket.fecha}</td>
-                      <td>{ticket.estado}</td>
+                    <tr key={ticket.Id}>
+                      <td>{ticket.Id}</td>
+                      <td>{ticket.Servicio}</td>
+                      <td>{ticket.Cliente}</td>
+                      <td>{ticket.Empleado}</td>
+                      <td>{ticket.Correo}</td>
+                      <td>{ticket.FechaDate}</td>
+                      <td>{ticket.Estado}</td>
                       <button
                         className="border-0 bg-none d-flex gap-2 txt_azul"
                         onClick={() => {

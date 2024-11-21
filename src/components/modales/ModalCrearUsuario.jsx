@@ -218,9 +218,9 @@ const ModalCrearUsuario = (props) => {
       apellido: usuario.ape,
       telefono: usuario.telefono,
       email: usuario.email,
-      contrasena: "",
+      contrasena: usuario.password,
       telContacto: usuario.contacto,
-      rolId: usuario.id_rol,
+      rolId: parseInt(usuario.id_rol),
     };
     if (usuario.password == undefined) {
       EditUser.Contrasena = null;

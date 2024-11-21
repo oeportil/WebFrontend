@@ -21,11 +21,11 @@ const TablaInfoTickets = ({ tickets }) => {
       <tbody>
         {tickets.map((ticket, i) => (
           <tr key={i}>
-            <td>{ticket.id}</td>
-            <td>{ticket.servicio}</td>
-            <td>{ticket.cliente}</td>
-            <td>{ticket.correo}</td>
-            <td>{ticket.fecha}</td>
+            <td>{ticket.Id}</td>
+            <td>{ticket.Servicio}</td>
+            <td>{ticket.Cliente}</td>
+            <td>{ticket.Correo}</td>
+            <td>{ticket.FechaDate}</td>
             <td>
               <button
                 className="border-0 bg-none txt_azul"
