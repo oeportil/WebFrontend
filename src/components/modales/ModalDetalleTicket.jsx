@@ -12,6 +12,7 @@ import {
 } from "../../controllers/TicketsController";
 import { obtenerDetalle } from "../../helpers/ObtenerDetalleTicket";
 import { getEstados } from "../../controllers/TicketsController";
+import { convertirUrlFirebase } from "../../helpers/Fireurl";
 const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
   const navigate = useNavigate();
   const userDataString = JSON.parse(localStorage.getItem("userData"));
@@ -227,7 +228,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
           <div className="mb-3">
             <Form.Label htmlFor="archivos">Archivos enviados:</Form.Label>
             {archivoExiste != "No se enviaron archivos para este ticket" && (
-              <a href={archivoExiste} target="_blank">
+              <a href={convertirUrlFirebase(archivoExiste)} target="_blank">
                 Presiona para ver archivo
               </a>
             )}
@@ -239,7 +240,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
               className="rounded-5 border-dark"
               style={{ height: "100px" }}
               disabled={true}
-              defaultValue={archivoExiste}
+              defaultValue={convertirUrlFirebase(archivoExiste)}
             />
           </div>
         </div>
