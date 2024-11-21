@@ -17,7 +17,7 @@ const Usuarios = () => {
   const [selected, setSelected] = useState({});
   const [rol, setRol] = useState([]);
   const [email, setEmail] = useState("");
-  const[rselected, setRselected] = useState(2);
+  const [rselected, setRselected] = useState(2);
   useEffect(() => {
     const data = async () => {
       const tec = await getTecnicos(2);
@@ -41,9 +41,9 @@ const Usuarios = () => {
     setTecnicos(tec);
   }
   async function handleChange(e) {
-    setRselected(parseInt(e.target.value))
-    const tec = await getTecnicos(parseInt(e.target.value))
-    setTecnicos(tec)
+    setRselected(parseInt(e.target.value));
+    const tec = await getTecnicos(parseInt(e.target.value));
+    setTecnicos(tec);
   }
   return (
     <main className="container my-4">
@@ -55,7 +55,7 @@ const Usuarios = () => {
         defaultValue={2}
       >
         {rol.map((r) => (
-          <option key={r.id_rol} value={r.id_rol} selected={ 2 == r.id_rol}>
+          <option key={r.idRol} value={r.idRol} selected={2 == r.idRol}>
             {r.nombre}
           </option>
         ))}

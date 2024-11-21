@@ -4,10 +4,12 @@ import imgDashborad from "../images/imgdashboard.png";
 import { useEffect, useState } from "react";
 import ModalCrearTicket from "../components/modales/ModalCrearTicket";
 import ModalDetalleTicket from "../components/modales/ModalDetalleTicket";
+import { formatDate } from "../helpers/FechaFormater";
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [ticketID, setTicketID] = useState("");
+  console.log(tickets);
   //aca se llama a la API
   const { idUsuario, tipo } = JSON.parse(localStorage.getItem("userData"));
   useEffect(() => {
@@ -97,16 +99,16 @@ const Dashboard = () => {
                   <tbody>
                     {tickets.map((ticket) => (
                       <tr
-                        key={ticket.id}
+                        key={ticket.Id}
                         onClick={() => {
                           setModalDetalle(true);
                           setTicketID(ticket.id);
                         }}
                       >
-                        <td>{ticket.id}</td>
-                        <td>{ticket.servicio}</td>
-                        <td>{ticket.fecha}</td>
-                        <td>{ticket.estado}</td>
+                        <td>{ticket.Id}</td>
+                        <td>{ticket.Servicio}</td>
+                        <td>{formatDate(ticket.FechaDate)}</td>
+                        <td>{ticket.Estado}</td>
                       </tr>
                     ))}
                   </tbody>
