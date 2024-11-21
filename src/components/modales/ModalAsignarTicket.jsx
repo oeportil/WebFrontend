@@ -1,45 +1,46 @@
-import Table from "react-bootstrap/Table"
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button'
-import  Form  from "react-bootstrap/Form"
+import Table from "react-bootstrap/Table";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import { getTecnicosforTicket } from "../../controllers/UsuariosControllers";
-import { asginarTicketBD } from "../../controllers/TicketsController"
+import { asginarTicketBD } from "../../controllers/TicketsController";
 
 const ModalAsignarTicket = (props) => {
-  const[tecnicos, setTecnicos] = useState([])
-  const[email, setEmail] = useState("")
-  useEffect(() => {
-    const tech = async() => {
-      const tecnic = await getTecnicosforTicket()
-      setTecnicos(tecnic)
-    } 
-    tech()
-  }, [])
-  const Filtrar =async() =>{   
-    const tecnic = await getTecnicosforTicket(email)
-    setTecnicos(tecnic)
-  }
+  console.log(props.id);
+  const [tecnicos, setTecnicos] = useState([]);
+  const [email, setEmail] = useState("");
 
-  const asignarTicket = async(tecnico) =>{
-    const asignacion = {
-      id_soporte: parseInt(tecnico)
-    }
-    const exito = await asginarTicketBD(props.id, asignacion)
-    if(exito == 200){
+  useEffect(() => {
+    const tech = async () => {
+      const tecnic = await getTecnicosforTicket();
+      setTecnicos(tecnic);
+    };
+    tech();
+  }, []);
+  const Filtrar = async () => {
+    const tecnic = await getTecnicosforTicket(email);
+    setTecnicos(tecnic);
+  };
+
+  const asignarTicket = async (tecnico) => {
+    const idSoporte = parseInt(tecnico);
+
+    const exito = await asginarTicketBD(props.id, idSoporte);
+    if (exito == 200) {
       toast.success("Ticket Asignado Correctamente");
       setTimeout(() => {
         props.onHide();
-        window.location.reload()
+        window.location.reload();
       }, 1500);
     } else {
       toast.error("Error Inesperado, Intente mas tarde");
-      return
-    }   
-  }
+      return;
+    }
+  };
   return (
     <Modal
       {...props}
@@ -53,16 +54,16 @@ const ModalAsignarTicket = (props) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <div className='p-2 border rounded my-2'>
-      <InputGroup className="mb-3 buscar">
-      <Form.Control
-                type="buscarID"
-                id="inputbuscarID"
-                aria-describedby="buscarIDHelpBlock"
-                placeholder="Buscar por Correo"
-                className="w-25"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+        <div className="p-2 border rounded my-2">
+          <InputGroup className="mb-3 buscar">
+            <Form.Control
+              type="buscarID"
+              id="inputbuscarID"
+              aria-describedby="buscarIDHelpBlock"
+              placeholder="Buscar por Correo"
+              className="w-25"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Button
               onClick={Filtrar}
@@ -71,47 +72,43 @@ const ModalAsignarTicket = (props) => {
             >
               Filtrar <i className="bi bi-arrow-right"></i>
             </Button>
-      </InputGroup>
+          </InputGroup>
 
-            {tecnicos.length != 0 ? <Table responsive="md" className="my-3 mx-2">
-            <thead>
+          {tecnicos.length != 0 ? (
+            <Table responsive="md" className="my-3 mx-2">
+              <thead>
                 <tr>
-                    <th >
-                        Nombre
-                    </th >
-                    <th  >
-                       Telefono
-                    </th>
-                    <th  >
-                        Correo
-                    </th>
+                  <th>Nombre</th>
+                  <th>Telefono</th>
+                  <th>Correo</th>
                 </tr>
-            </thead>
-            <tbody>
-              {tecnicos.map((tecnico, i) => (
+              </thead>
+              <tbody>
+                {tecnicos.map((tecnico, i) => (
                   <tr key={i}>
-                  <td>{tecnico.nombre}</td>
-                  <td>{tecnico.telefono}</td>
-                  <td>{tecnico.email}</td>
-                  <td>
-                      <button onClick={() =>asignarTicket(tecnico.id_usuario)} className="border-0 bg-none txt_azul">
-                          Asignar
+                    <td>{tecnico.nombre}</td>
+                    <td>{tecnico.telefono}</td>
+                    <td>{tecnico.email}</td>
+                    <td>
+                      <button
+                        onClick={() => asignarTicket(tecnico.id_usuario)}
+                        className="border-0 bg-none txt_azul"
+                      >
+                        Asignar
                       </button>
-                  </td>        
-              </tr>
-              ))}                
-            </tbody>
-            </Table>: <div>No Hay Tecnicos Aun</div>}
-       </div>
-       <ToastContainer
-              autoClose={2000}
-              transition:Slide
-              
-              theme="colored"
-            />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <div>No Hay Tecnicos Aun</div>
+          )}
+        </div>
+        <ToastContainer autoClose={2000} transition:Slide theme="colored" />
       </Modal.Body>
     </Modal>
-  )
-}
+  );
+};
 
-export default ModalAsignarTicket
+export default ModalAsignarTicket;

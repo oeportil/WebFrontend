@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { getTicketsDasAdmin } from "../../controllers/TicketsController";
 import ModalAsignarTicket from "../modales/ModalAsignarTicket";
+import { formatDate } from "../../helpers/FechaFormater";
 
 const HistorialTablaAdmin = () => {
   const [Tickets, setTickets] = useState([]);
@@ -31,7 +32,7 @@ const HistorialTablaAdmin = () => {
             {Tickets.map((ticket, i) => (
               <tr key={i}>
                 <td>{ticket.Servicio}</td>
-                <td>{ticket.FechaDate}</td>
+                <td>{formatDate(ticket.FechaDate)}</td>
                 <td>
                   {ticket.Empleado != null ? (
                     ticket.Empleado

@@ -114,6 +114,7 @@ const ModalDetalleTicket = ({ show, idTicket, onHide }) => {
       toast.error(`Error al Enviar una Notificacion, intente mas tarde`);
     }
   };
+
   return (
     <Modal
       show={show}
