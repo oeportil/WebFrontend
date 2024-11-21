@@ -88,7 +88,6 @@ const AdminTickets = () => {
 
     fetchDetalle();
   }, [ticketID]);
-  console.log(detalleTicket);
 
   return (
     <main className="container my-3">
@@ -122,15 +121,15 @@ const AdminTickets = () => {
           </thead>
           <tbody>
             {tickets.map((ticket) => (
-              <tr key={ticket.id}>
-                <td>{ticket.id}</td>
-                <td>{ticket.servicio}</td>
-                <td>{ticket.cliente}</td>
-                <td>{ticket.correo}</td>
+              <tr key={ticket.Id}>
+                <td>{ticket.Id}</td>
+                <td>{ticket.Servicio}</td>
+                <td>{ticket.Cliente}</td>
+                <td>{ticket.Correo}</td>
                 <td>
                   <Link
                     className="txt_azul"
-                    to={`/dashboard/employee/tickets/${ticket.id}`}
+                    to={`/dashboard/employee/tickets/${ticket.Id}`}
                   >
                     Editar Ticket
                   </Link>
